@@ -1681,3 +1681,185 @@
     - url: https://www.zurich-tour.com/company-details/
       evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
   notes: "Discovery provenance: expanded link-following from verified Headout sites and independent regional searches; ownership was published only after direct legal-page verification."
+- domain: tickets-tuscany.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.tickets-tuscany.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Headout legal-identifier search and link-following from verified Florence/Tuscany sites."
+- domain: neverseatickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.neverseatickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Headout legal-identifier search and link-following from verified airport and destination sites."
+- domain: lombok-tours.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.lombok-tours.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Indonesian destination and Headout legal-identifier searches."
+- domain: jardin-majorelle-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.jardin-majorelle-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and states that it is not the venue's website.
+  notes: "Discovery provenance: independent Marrakech attraction search and related-destination link-following."
+- domain: castle-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.castle-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent attraction search and link-following through the site's castle directory."
+- domain: atlas-mountain-tours.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://atlas-mountain-tours.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: external-link traversal from the verified Jardin Majorelle destination site."
+- domain: harry-potter.london-studio-tours.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://harry-potter.london-studio-tours.com/company-details/
+      evidence: The dedicated hostname's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: external-link traversal from the verified Castle attraction site; blocking boundary is limited to this dedicated hostname and descendants."
+- domain: hattawadihubtickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.hattawadihubtickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Dubai attraction and Headout legal-identifier searches."
+- domain: taipei-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.taipei-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Taiwan destination search and localized Headout legal-identifier searches."
+- domain: sharjahdesertparktickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.sharjahdesertparktickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Sharjah attraction search and link-following through the verified Dubai regional cluster."
+- domain: orlando-ticket.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.orlando-ticket.com/es/company-details/
+      evidence: The domain's live Spanish Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Spanish-language Orlando attraction search."
+- domain: manchester-ticket.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.manchester-ticket.com/es/company-details/
+      evidence: The domain's live Spanish Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent multilingual Manchester attraction search."
+- domain: wonderworks-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.wonderworks-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: external-link traversal from the verified Orlando destination site."
+- domain: visitdubaiframe.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.visitdubaiframe.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Dubai attraction search using Headout partner/operator statements."
+- domain: wroclaw-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.wroclaw-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact; the site also attributes its curation to Headout.
+  notes: "Discovery provenance: independent Polish/European destination search using Headout attribution statements."
+- domain: malaysia-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.malaysia-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Malaysia regional search and traversal of the site's destination directory."
+- domain: alaska-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.alaska-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Alaska regional search and traversal of the site's city directory."
+- domain: thetoppenangtickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.thetoppenangtickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: external-link traversal from the verified Malaysia regional directory."
+- domain: gentingcablecartickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.gentingcablecartickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: external-link traversal from the verified Malaysia regional directory."
+- domain: gpmotorsportstickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.gpmotorsportstickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent motorsports search using the Headout registration identifier."
+- domain: polignanoamare-tours.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.polignanoamare-tours.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact; the root site attributes its curation to Headout.
+  notes: "Discovery provenance: independent Italian destination search and regional link-following."
+- domain: teotihuacantours.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.teotihuacantours.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Mexican attraction search and regional link-following."
+- domain: everglades-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.everglades-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Florida attraction search and regional link-following."
+- domain: mexico-city-tours.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.mexico-city-tours.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact; the root site attributes its curation to Headout.
+  notes: "Discovery provenance: external-link traversal from the verified Teotihuacan destination site."
+- domain: lake-como-tours.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.lake-como-tours.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent Italian geographic search and link-following from the Milan/Lombardy cluster."
+- domain: atlanta-tours.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.atlanta-tours.com/fr/company-details/
+      evidence: The domain's live French Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+  notes: "Discovery provenance: independent multilingual Atlanta geographic and attraction search."
