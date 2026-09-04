@@ -1,2 +1,16 @@
 ! Generated from verified records; do not edit.
-! Entries: 0; includes descendants of each listed name.
+! Entries: 14; includes descendants of each listed name.
+||acropolis-tickets.com^
+||barcelona-tickets.com^
+||headout.com^
+||kennedyspacecenter-tickets.com^
+||london-tickets.co.uk^
+||oslo-tickets.com^
+||paristickets.com^
+||pompeii-tickets.com^
+||praguecastletickets.com^
+||singapore-tickets.com^
+||thevaticantickets.com^
+||tickets-amsterdam.com^
+||tickets-istanbul.com^
+||tickets-naples.com^

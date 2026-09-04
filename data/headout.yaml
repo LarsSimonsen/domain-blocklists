@@ -1,3 +1,87 @@
 # Verified entries only. See README.md for criteria and record format.
-# Empty until domains have been independently verified.
-[]
+- domain: acropolis-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.acropolis-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: barcelona-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.barcelona-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: headout.com
+  relationship: owned
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://hub.headout.com/terms-and-conditions/
+      evidence: Official Headout Hub terms define the Headout booking platform as owned and operated by Headout and state that it is accessible via www.headout.com.
+    - url: https://www.headout.com/company-details/
+      evidence: Headout's live legal page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: kennedyspacecenter-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.kennedyspacecenter-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: london-tickets.co.uk
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.london-tickets.co.uk/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: oslo-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.oslo-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: paristickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.paristickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: pompeii-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.pompeii-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: praguecastletickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.praguecastletickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: singapore-tickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.singapore-tickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: thevaticantickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.thevaticantickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: tickets-amsterdam.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.tickets-amsterdam.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: tickets-istanbul.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.tickets-istanbul.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: tickets-naples.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.tickets-naples.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
