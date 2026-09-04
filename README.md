@@ -8,13 +8,13 @@ Each list has a defined purpose, documented inclusion criteria, and supporting e
 
 | List | Scope | Status |
 | --- | --- | --- |
-| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Scaffold only; no verified entries yet |
+| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified first batch: 14 entries |
 
 Additional lists may be added over time, each with its own scope and inclusion criteria.
 
 ## Use
 
-The initial exports are empty and block nothing. Once verified entries are added, subscribe using the appropriate URL:
+The exports contain 14 verified entries and block the listed names and their descendants. Subscribe using the appropriate URL:
 
 | Product or format | Subscription / download |
 | --- | --- |
