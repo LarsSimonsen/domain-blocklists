@@ -4,6 +4,7 @@
 - The root README covers the broader project; Headout is only the initial list.
 - Follow the inclusion criteria in README.md. Require direct public evidence and a human verification date. Never infer ownership from shared infrastructure, design, images, or affiliate links alone.
 - Commit only verified records. Suggestions may appear in public issues without a template, but unverified research and candidates must not enter tracked datasets, notes, or exports.
+- Keep discovery provenance in the research handoff or pull request, not in dataset `notes`. Use `notes` only for a material blocking-boundary clarification that cannot be inferred from the domain and relationship.
 - Block listed names and descendants. On shared services use the verified dedicated hostname; never broaden it to the provider's parent domain.
 - Use factual, restrained language throughout public content. Inclusion makes no allegation of misconduct.
 - Edit data/*.yaml, then run `python scripts/blocklists.py build`. Never hand-edit lists/.

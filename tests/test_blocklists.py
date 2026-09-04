@@ -54,6 +54,12 @@ class BlocklistsTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.load([entry])
 
+    def test_rejects_discovery_provenance_notes(self):
+        entry = record()
+        entry["notes"] = "Discovery provenance: found in a regional search."
+        with self.assertRaises(ValueError):
+            self.load([entry])
+
     def test_rejects_duplicate_domains_and_yaml_keys(self):
         with self.assertRaises(ValueError):
             self.load([record(), record()])
