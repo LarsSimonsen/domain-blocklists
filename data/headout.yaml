@@ -1335,13 +1335,13 @@
       evidence: The domain's live legal/terms page identifies Headout as the website's legal entity and provides direct Headout legal identifiers.
 - domain: sydney-harbour-cruises.com
   relationship: owned
-  verified_on: '2026-09-05'
+  verified_on: '2026-09-04'
   sources:
     - url: https://www.sydney-harbour-cruises.com/company-details/
       evidence: The domain's live Company details page identifies Headout Inc. as the legal entity and provides registration number 5541011, legal@headout.com, and the Headout correspondence address; ownership was confirmed by the repository maintainer.
 - domain: sydneyoperahousetickets.com
   relationship: operated
-  verified_on: '2026-09-05'
+  verified_on: '2026-09-04'
   sources:
     - url: https://www.sydneyoperahousetickets.com/company-details
       evidence: The domain's live Company details page identifies Headout UK Ltd. as the website operator and states that the website is run by Headout; operation was confirmed by the repository maintainer.
