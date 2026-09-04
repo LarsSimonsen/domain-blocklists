@@ -42,7 +42,7 @@ This optional list is for people who prefer to avoid Headout-operated websites a
 
 Use [public issues](https://github.com/LarsSimonsen/domain-blocklists/issues) for suggestions and corrections; no template is required. Supporting sources are helpful. Keep repository text, issues, and commit messages factual and relevant to the list criteria.
 
-`data/headout.yaml` is the source of truth. All committed records are verified; there is no candidate status. Each record has `domain`, `relationship` (`owned`, `operated`, or `dedicated-hostname`), `verified_on` (YYYY-MM-DD), and a nonempty `sources` list containing `url` and `evidence`. Optional `notes` may explain the blocking boundary. Write explanations in your own words; linked third-party material remains subject to its own terms.
+`data/headout.yaml` is the source of truth. All committed records are verified; there is no candidate status. Each record has `domain`, `relationship` (`owned`, `operated`, or `dedicated-hostname`), `verified_on` (YYYY-MM-DD), and a nonempty `sources` list containing `url` and `evidence`. Optional `notes` are reserved for material blocking-boundary clarifications. Keep discovery provenance in the research handoff or pull request. Write explanations in your own words; linked third-party material remains subject to its own terms.
 
 Illustrative schema only (the reserved example domain below is not a list entry):
 

@@ -69,8 +69,13 @@ def load_records(path):
         verified = date.fromisoformat(raw_date)
         if verified > date.today():
             raise ValueError(f"{domain}: verification date is in the future")
-        if "notes" in entry and not isinstance(entry["notes"], str):
-            raise ValueError(f"{domain}: notes must be text")
+        if "notes" in entry:
+            notes = entry["notes"]
+            if not isinstance(notes, str) or not notes.strip():
+                raise ValueError(f"{domain}: notes must be nonempty text")
+            if notes.casefold().startswith("discovery provenance:"):
+                raise ValueError(
+                    f"{domain}: keep discovery provenance outside the dataset")
         sources = entry["sources"]
         if not isinstance(sources, list) or not sources:
             raise ValueError(f"{domain}: at least one source is required")
