@@ -8,13 +8,13 @@ Each list has a defined purpose, documented inclusion criteria, and supporting e
 
 | List | Scope | Status |
 | --- | --- | --- |
-| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified expanded set: 268 entries |
+| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified expanded set: 392 entries |
 
 Additional lists may be added over time, each with its own scope and inclusion criteria.
 
 ## Use
 
-The exports contain 268 verified entries and block the listed names and their descendants. Subscribe using the appropriate URL:
+The exports contain 392 verified entries and block the listed names and their descendants. Subscribe using the appropriate URL:
 
 | Product or format | Subscription / download |
 | --- | --- |
