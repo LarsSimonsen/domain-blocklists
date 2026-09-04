@@ -32,7 +32,7 @@ Format references: [Pi-hole domain matching](https://pi-hole.net/blog/2023/03/22
 
 This optional list is for people who prefer to avoid Headout-operated websites and book directly with venues or through other providers of their choice.
 
-- Require direct public evidence of ownership or operation, such as a legal notice or an official Headout source. Record the source URL, a short factual explanation, and the date a person checked it.
+- Require direct public evidence of ownership or operation, such as a legal notice or an official Headout source. Record the source URL, a short factual explanation, and the date the evidence was verified. An agent may verify a record without human review only when a retrieved live page explicitly states that the exact website or hostname is owned by Headout; record that relationship as `owned`. Other evidence, including a page that merely lists Headout as its legal entity, requires human review.
 - Independent affiliates, partners, and venues do not qualify merely because they sell through Headout. Shared hosting, similar design, or Headout images alone are investigation leads, not sufficient evidence.
 - A dedicated hostname on a shared service qualifies only with direct evidence of its operation by Headout. Review the blocking boundary carefully.
 - Keep unverified candidates out of committed datasets and exports. Public issues may contain unverified suggestions; an issue is not a verified finding.
@@ -41,6 +41,10 @@ This optional list is for people who prefer to avoid Headout-operated websites a
 ## Contribute and maintain
 
 Use [public issues](https://github.com/LarsSimonsen/domain-blocklists/issues) for suggestions and corrections; no template is required. Supporting sources are helpful. Keep repository text, issues, and commit messages factual and relevant to the list criteria.
+
+Discovery work should combine independent sources: official destination and attraction directories, sitemaps and localized links, exact legal-identifier searches, naming-pattern searches, and infrastructure signals such as certificates and DNS. Infrastructure and pattern matches are leads only. Long searches should maintain a resumable candidate ledger outside the repository, including the discovery source, status, attempts, redirects, evidence URL, and reason for rejection or retry. An exhaustive pass ends only after every planned discovery lane has completed, the candidate queue is empty, and repeated full cycles produce no new evidence-backed candidates. This indicates search saturation, not guaranteed completeness; recurring monitoring is needed because domains and public evidence change.
+
+Keep discovery and verification separate where practical. Discovery produces evidence packets for independent review. Human verification remains required unless a retrieved live page explicitly states that the exact website or hostname is owned by Headout. Search snippets, redirects, branding, infrastructure, and legal-entity details without an explicit ownership statement do not qualify for that exception.
 
 `data/headout.yaml` is the source of truth. All committed records are verified; there is no candidate status. Each record has `domain`, `relationship` (`owned`, `operated`, or `dedicated-hostname`), `verified_on` (YYYY-MM-DD), and a nonempty `sources` list containing `url` and `evidence`. Optional `notes` are reserved for material blocking-boundary clarifications. Keep discovery provenance in the research handoff or pull request. Write explanations in your own words; linked third-party material remains subject to its own terms.
 
@@ -66,7 +70,7 @@ python -m unittest discover -s tests
 
 Commit the YAML changes and regenerated exports together in a pull request. The maintainer reviews and merges changes before they reach the `main` subscription URLs. Automated checks validate structure and export consistency; they cannot establish ownership or verify the truth of evidence. Configure a repository branch rule requiring pull requests and the `validate` check to enforce this workflow; the workflow file alone does not enforce review.
 
-One GitHub Actions workflow also runs monthly and on manual request. `python scripts/blocklists.py review` checks DNS address resolution, source availability/redirects, and verification dates older than 90 days. Findings appear in the run summary and fail the review job so GitHub can notify subscribers according to their notification settings. It never edits records or publishes changes. A successful response does not prove that a page still supports inclusion; human review remains necessary. DNS failures and HTTP blocks can be temporary. Scheduled runs begin after the workflow is merged into the default branch.
+One GitHub Actions workflow also runs monthly and on manual request. `python scripts/blocklists.py review` checks DNS address resolution, source availability/redirects, and verification dates older than 90 days. Findings appear in the run summary and fail the review job so GitHub can notify subscribers according to their notification settings. It never edits records or publishes changes. A successful response does not prove that a page still supports inclusion; the page content must be reverified under the rules above. DNS failures and HTTP blocks can be temporary. Scheduled runs begin after the workflow is merged into the default branch.
 
 ## Meaning of inclusion
 
