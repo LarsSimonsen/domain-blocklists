@@ -1,8 +1,9 @@
 ! Generated from verified records; do not edit.
-! Entries: 217; includes descendants of each listed name.
+! Entries: 242; includes descendants of each listed name.
 ||abudhabi-tickets.com^
 ||acropolis-tickets.com^
 ||adelaide-tickets.com^
+||alcazar-seville-tickets.com^
 ||algarve-tour.com^
 ||alicante-tickets.com^
 ||antelope-canyon-tours.com^
@@ -15,6 +16,7 @@
 ||barcelona-tickets.com^
 ||basilicacisterntickets.com^
 ||basque-country-tours.com^
+||benfica-tickets.com^
 ||bergen-tickets.com^
 ||berlin-tickets.com^
 ||blue-mountain-day-tours.com^
@@ -35,6 +37,7 @@
 ||cairo-tickets.com^
 ||canal-cruise-amsterdam.com^
 ||cancuntickets.com^
+||castel-sant-angelo-ticket.com^
 ||cherry-blossom-tours.com^
 ||chiang-mai-tickets.com^
 ||christchurch-tickets.com^
@@ -55,6 +58,7 @@
 ||dubai-tickets.co^
 ||dublin-ticket.com^
 ||edinburgh-tickets.com^
+||eiffeltickets.com^
 ||europe-train-passes.com^
 ||flamenco-show-tickets.com^
 ||frankfurt-ticket.com^
@@ -71,16 +75,20 @@
 ||hamburg-tickets.com^
 ||hanoi-tickets.com^
 ||headout.com^
+||helsinki-tickets.com^
 ||heraklion-tours.com^
 ||herculaneumtickets.com^
+||hk-airport-express.com^
 ||hobart-tours.com^
 ||hochiminh-city.com^
 ||hoi-an-tickets.com^
+||hongkong-tickets.com^
 ||hop-on-hop-off-tickets.com^
 ||hurghadatickets.com^
 ||imgworldstickets.com^
 ||interlaken-tickets.com^
 ||japanrailpasstickets.com^
+||jeronimosmonasterytickets.com^
 ||jungfraujochtickets.com^
 ||kennedyspacecenter-tickets.com^
 ||knossospalacetickets.com^
@@ -91,6 +99,7 @@
 ||kyototickets.com^
 ||langkawi-tickets.com^
 ||lasvegas-ticket.com^
+||lisboacitycard.com^
 ||loirevalley-tickets.com^
 ||london-theater-tickets.com^
 ||london-tickets.co.uk^
@@ -118,6 +127,7 @@
 ||niagara-tours.com^
 ||nice-tickets.com^
 ||normandy-tours.com^
+||northern-lights-tour.com^
 ||nycmomatickets.com^
 ||okinawatickets.com^
 ||osaka-tickets.com^
@@ -130,8 +140,10 @@
 ||pattaya-tickets.com^
 ||perth-tickets.com^
 ||philadelphia-tours.com^
+||phillip-island-tours.com^
 ||phiphi-islands-tours.com^
 ||phuket-tickets.com^
+||pigeon-forge-tickets.com^
 ||pisatickets.com^
 ||plitvicenationalparktickets.com^
 ||pompeii-tickets.com^
@@ -149,18 +161,24 @@
 ||riyadh-tickets.com^
 ||rotterdam-tickets.com^
 ||rottnestislandtours.com^
+||rovaniemitours.com^
 ||royal-palace-madrid-tickets.com^
 ||royalpalaceofnaplestickets.com^
 ||safariworldbangkoktickets.com^
+||salzburg-tickets.com^
 ||san-antonio-tours.com^
 ||san-diego-tickets.com^
 ||san-francisco-tours.com^
 ||san-gimignano-tickets.com^
 ||santorini-boat-tours.com^
 ||santorini-cable-car-tickets.com^
+||saojorgecastletickets.com^
 ||sapa-tickets.com^
+||schindlers-factory-tickets.com^
 ||seattle-tours.com^
+||seoul-tickets.com^
 ||seville-tickets.com^
+||sicilytickets.com^
 ||sienatickets.com^
 ||singapore-tickets.com^
 ||st-peters-basilica-tickets.com^
@@ -169,6 +187,7 @@
 ||temple-of-zeus.com^
 ||thames-river-cruise.com^
 ||the-hague-tickets.com^
+||theauschwitztours.com^
 ||thevaticantickets.com^
 ||tickets-amsterdam.com^
 ||tickets-athens.com^
@@ -177,6 +196,8 @@
 ||tickets-dresden.com^
 ||tickets-florence.it^
 ||tickets-istanbul.com^
+||tickets-krakow.com^
+||tickets-lisbon.com^
 ||tickets-liverpool.com^
 ||tickets-malaga.com^
 ||tickets-mallorca.com^
@@ -202,6 +223,7 @@
 ||tours-capri.com^
 ||tours-ibiza.com^
 ||tours-iceland.com^
+||tours-marrakesh.com^
 ||tours-nashville.com^
 ||tours-rotorua.com^
 ||tours-savannah.com^
@@ -211,9 +233,12 @@
 ||tulip-garden-tickets.com^
 ||turkish-baths.com^
 ||verona-tickets.com^
+||vienna-concert-tickets.com^
 ||whitsundays-tours.com^
+||wieliczka-salt-mine-tours.com^
 ||wildwaditickets.com^
 ||williamsburg-tickets.com^
+||zakopane-tickets.com^
 ||zermatt-tickets.com^
 ||zoo-tickets.com^
 ||zurich-tour.com^
