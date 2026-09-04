@@ -1,0 +1,51 @@
+name: Blocklist checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 8 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tests
+      - run: python scripts/blocklists.py check
+
+  review:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - name: Flag entries needing review
+        shell: bash
+        run: |
+          set -o pipefail
+          python scripts/blocklists.py review 2>&1 | tee review.txt
+      - name: Attach review summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f review.txt ]; then
+            echo '## Monthly review' >> "$GITHUB_STEP_SUMMARY"
+            echo '<pre>' >> "$GITHUB_STEP_SUMMARY"
+            python -c "import html; from pathlib import Path; print(html.escape(Path('review.txt').read_text()))" >> "$GITHUB_STEP_SUMMARY"
+            echo '</pre>' >> "$GITHUB_STEP_SUMMARY"
+          fi
