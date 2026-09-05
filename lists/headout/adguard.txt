@@ -1,6 +1,7 @@
 ! Generated from verified records; do not edit.
-! Entries: 486; includes descendants of each listed name.
+! Entries: 488; includes descendants of each listed name.
 ||abudhabi-tickets.com^
+||abudhabitickets.com^
 ||acropolis-tickets.com^
 ||adelaide-tickets.com^
 ||agadir-tickets.com^
@@ -69,6 +70,7 @@
 ||canary-island-tours.com^
 ||canberra-tours.com^
 ||cancuntickets.com^
+||capetown-tickets.com^
 ||carcassonne-tickets.com^
 ||castel-sant-angelo-ticket.com^
 ||casteldelmonte-tickets.com^
