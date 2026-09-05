@@ -1,5 +1,5 @@
 ! Generated from verified records; do not edit.
-! Entries: 481; includes descendants of each listed name.
+! Entries: 486; includes descendants of each listed name.
 ||abudhabi-tickets.com^
 ||acropolis-tickets.com^
 ||adelaide-tickets.com^
@@ -152,6 +152,7 @@
 ||hattawadihubtickets.com^
 ||headout.com^
 ||heidelberg-tickets.com^
+||helicopter-tour-dubai.com^
 ||helsinki-tickets.com^
 ||heraklion-tours.com^
 ||herculaneumtickets.com^
@@ -268,6 +269,7 @@
 ||pattaya-tickets.com^
 ||penang-tickets.com^
 ||penang-tours.com^
+||penapalacetickets.com^
 ||penha-tickets.com^
 ||perth-tickets.com^
 ||philadelphia-tours.com^
@@ -315,6 +317,7 @@
 ||santorini-tickets.com^
 ||saojorgecastletickets.com^
 ||sapa-tickets.com^
+||schifffahrtwien.at^
 ||schindlers-factory-tickets.com^
 ||seattle-tours.com^
 ||seine-river-cruises.com^
@@ -379,6 +382,7 @@
 ||tickets-lisbon.com^
 ||tickets-liverpool.com^
 ||tickets-london.co.uk^
+||tickets-machu-picchu.com^
 ||tickets-malaga.com^
 ||tickets-mallorca.com^
 ||tickets-melbourne.com^
@@ -459,6 +463,7 @@
 ||vegas-show-tickets.com^
 ||verona-tickets.com^
 ||versailles-palace-tickets.com^
+||versailles.paris^
 ||vienna-concert-tickets.com^
 ||visitdubaiframe.com^
 ||viterbo-tickets.com^

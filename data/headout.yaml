@@ -2888,3 +2888,33 @@
   sources:
     - url: https://www.yogyakarta-tickets.com/company-details/
       evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: versailles.paris
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: http://versailles.paris/company-details/
+      evidence: The exact-host live page states that the website is run by Headout and works with attractions and tour operators. The same page links to the site's Company details section; HTTPS had a certificate-name error during retrieval, so the live HTTP source is recorded.
+- domain: tickets-machu-picchu.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.tickets-machu-picchu.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: penapalacetickets.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.penapalacetickets.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: schifffahrtwien.at
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.schifffahrtwien.at/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: helicopter-tour-dubai.com
+  relationship: operated
+  verified_on: '2026-09-04'
+  sources:
+    - url: https://www.helicopter-tour-dubai.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
