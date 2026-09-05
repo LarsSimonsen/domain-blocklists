@@ -150,6 +150,7 @@ harry-potter.london-studio-tours.com
 hattawadihubtickets.com
 headout.com
 heidelberg-tickets.com
+helicopter-tour-dubai.com
 helsinki-tickets.com
 heraklion-tours.com
 herculaneumtickets.com
@@ -266,6 +267,7 @@ paristickets.com
 pattaya-tickets.com
 penang-tickets.com
 penang-tours.com
+penapalacetickets.com
 penha-tickets.com
 perth-tickets.com
 philadelphia-tours.com
@@ -313,6 +315,7 @@ santorini-cable-car-tickets.com
 santorini-tickets.com
 saojorgecastletickets.com
 sapa-tickets.com
+schifffahrtwien.at
 schindlers-factory-tickets.com
 seattle-tours.com
 seine-river-cruises.com
@@ -377,6 +380,7 @@ tickets-krakow.com
 tickets-lisbon.com
 tickets-liverpool.com
 tickets-london.co.uk
+tickets-machu-picchu.com
 tickets-malaga.com
 tickets-mallorca.com
 tickets-melbourne.com
@@ -457,6 +461,7 @@ vancouver-whalewatching.com
 vegas-show-tickets.com
 verona-tickets.com
 versailles-palace-tickets.com
+versailles.paris
 vienna-concert-tickets.com
 visitdubaiframe.com
 viterbo-tickets.com
