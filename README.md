@@ -8,13 +8,13 @@ Each list has a defined purpose, documented inclusion criteria, and supporting e
 
 | List | Scope | Status |
 | --- | --- | --- |
-| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified expanded set: 488 entries |
+| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified expanded set: 498 entries |
 
 Additional lists may be added over time, each with its own scope and inclusion criteria.
 
 ## Use
 
-The exports contain 488 verified entries and block the listed names and their descendants. Subscribe using the appropriate URL:
+The exports contain 498 verified entries and block the listed names and their descendants. Subscribe using the appropriate URL:
 
 | Product or format | Subscription / download |
 | --- | --- |
@@ -40,11 +40,11 @@ This optional list is for people who prefer to avoid Headout-operated websites a
 
 ## Contribute and maintain
 
-Use [public issues](https://github.com/LarsSimonsen/domain-blocklists/issues) for suggestions and corrections; no template is required. Supporting sources are helpful. Keep repository text, issues, and commit messages factual and relevant to the list criteria.
+Use [public issues](https://github.com/LarsSimonsen/domain-blocklists/issues) for suggestions and corrections; no template is required. Supporting sources are helpful. Keep repository text, issues, and commit messages factual and relevant to the list criteria. Never include private local filesystem paths in pull requests, issues, reviews, comments, commit messages, or other public text. Refer to tracked files with repository-relative paths and describe external or temporary artifacts generically, without usernames, home directories, drive letters, workspace roots, or temporary-directory paths.
 
 Discovery work should combine independent sources: official destination and attraction directories, sitemaps and localized links, exact legal-identifier searches, naming-pattern searches, and infrastructure signals such as certificates and DNS. Infrastructure and pattern matches are leads only. Long searches should maintain a resumable candidate ledger outside the repository, including the discovery source, status, attempts, redirects, evidence URL, and reason for rejection or retry. An exhaustive pass ends only after every planned discovery lane has completed, the candidate queue is empty, and repeated full cycles produce no new evidence-backed candidates. This indicates search saturation, not guaranteed completeness; recurring monitoring is needed because domains and public evidence change.
 
-All blocklist-related DNS lookups must explicitly use Cloudflare's standard resolvers at `1.1.1.1` and `1.0.0.1`, or its DNS-over-HTTPS endpoint at `https://cloudflare-dns.com/dns-query`, instead of DNS supplied through DHCP. Agent-controlled web retrieval should use a client configured for Cloudflare DNS when available. Hosted search and browser tools may manage DNS internally; when they do not expose resolver selection, perform a direct Cloudflare lookup for each candidate hostname before browsing and disclose that the browsing tool's resolver could not be controlled. Retry failures through both Cloudflare resolver addresses and inspect relevant A, AAAA, and CNAME records before treating a hostname as unresolved.
+All blocklist-related DNS lookups must explicitly use a primary approved public resolver: Cloudflare at `1.1.1.1` or `1.0.0.1`, Cloudflare's DNS-over-HTTPS endpoint at `https://cloudflare-dns.com/dns-query`, or Google Public DNS at `8.8.8.8` or `8.8.4.4`, instead of DNS supplied through DHCP. Optional independent checks may use Quad9's unfiltered service at `9.9.9.10` or `149.112.112.10`, its DNS-over-HTTPS endpoint at `https://dns10.quad9.net/dns-query`, AdGuard DNS's unfiltered service at `94.140.14.140` or `94.140.14.141`, or its DNS-over-HTTPS endpoint at `https://unfiltered.adguard-dns.com/dns-query`. Agent-controlled web retrieval should use a client configured for an approved unfiltered public resolver when available. Hosted search and browser tools may manage DNS internally; when they do not expose resolver selection, perform a direct lookup through a primary approved resolver for each candidate hostname before browsing and disclose that the browsing tool's resolver could not be controlled. Treat a failure from one resolver as inconclusive: retry the other address from the same provider, inspect relevant A, AAAA, and CNAME records, and require agreeing results from at least two independent unfiltered providers, including Cloudflare or Google, before treating the hostname as unresolved. Never use a negative response from a filtering or user-configured resolver as evidence that a hostname is unresolved.
 
 Keep discovery and verification separate where practical. Discovery produces evidence packets for independent review. Explicit ownership statements and legal-entity evidence meeting the inclusion criteria above qualify for automatic approval without human confirmation. The live page must identify Headout as the legal entity for the website being verified; an incidental company mention is insufficient. Search snippets, redirects, branding, infrastructure, and shared templates alone do not qualify. Pull requests still require maintainer review before merging.
 
