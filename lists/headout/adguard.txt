@@ -1,5 +1,5 @@
 ! Generated from verified records; do not edit.
-! Entries: 488; includes descendants of each listed name.
+! Entries: 527; includes descendants of each listed name.
 ||abudhabi-tickets.com^
 ||abudhabitickets.com^
 ||acropolis-tickets.com^
@@ -46,6 +46,45 @@
 ||blue-mountain-day-tours.com^
 ||bluemosquetickets.com^
 ||bologna-tickets.com^
+||book.golden-circle-tour.com^
+||book.grand-canyon-tours.com^
+||book.groningen-tickets.com^
+||book.guangzhou-tickets.com^
+||book.gulbenkiantickets.com^
+||book.heidelberg-tickets.com^
+||book.hiroshima-tickets.com^
+||book.innsbruck-tickets.com^
+||book.jakarta-tickets.com^
+||book.jamesbondisland-tours.com^
+||book.jeju-tickets.com^
+||book.jesolo-tours.com^
+||book.kaikoura-tours.com^
+||book.key-west-tours.com^
+||book.koh-samui-tours.com^
+||book.lake-garda-tours.com^
+||book.lakegenevatickets.com^
+||book.leipzig-tickets.com^
+||book.lombok-tickets.com^
+||book.macau-tickets.com^
+||book.mandurah-tickets.com^
+||book.mauritius-tickets.com^
+||book.melaka-tickets.com^
+||book.melaka-tours.com^
+||book.muscat-tours.com^
+||book.nairobi-tours.com^
+||book.oklahoma-city-tickets.com^
+||book.paestumtickets.com^
+||book.postojnacavetickets.com^
+||book.shanghai-tickets.com^
+||book.shenzhen-tickets.com^
+||book.shkoder-tours.com^
+||book.sorrento-tours.com^
+||book.st-augustine-tickets.com^
+||book.stavanger-tickets.com^
+||book.stewart-island-tours.com^
+||book.strasbourg-tours.com^
+||book.sunshine-coast-tickets.com^
+||book.tango-show-tickets.com^
 ||bordeauxtickets.fr^
 ||bosphorus-cruises.com^
 ||boston-ticket.com^
