@@ -1,14 +1,18 @@
-"""Validate verified YAML records, generate exports, or flag entries for review."""
+"""Inspect verified records, validate YAML, generate exports, or flag review needs."""
 
 import argparse
 from datetime import date
+from functools import lru_cache
+import hashlib
 import ipaddress
+import http.client
+import json
 from pathlib import Path
 import re
 import socket
 import sys
-from urllib.parse import urlsplit
-from urllib.request import Request, urlopen
+from urllib.parse import urlencode, urlsplit
+from urllib.request import HTTPHandler, HTTPSHandler, ProxyHandler, Request, build_opener
 
 import yaml
 
@@ -100,51 +104,194 @@ def exports(records):
     return {"domains.txt": plain, "pihole.txt": rules, "adguard.txt": rules}
 
 
-def review(records):
+DNS_PROVIDERS = (
+    ("cloudflare-dns.com", "/dns-query", ("1.1.1.1", "1.0.0.1")),
+    ("dns.google", "/resolve", ("8.8.8.8", "8.8.4.4")),
+)
+
+
+@lru_cache(maxsize=4096)
+def dns_addresses(domain):
+    """Use pinned public DoH endpoints; distinguish negatives from failures."""
+    negatives = 0
+    for host, path, endpoints in DNS_PROVIDERS:
+        for endpoint in endpoints:
+            addresses = []
+            statuses = []
+            has_alias = False
+            try:
+                for kind in ("A", "AAAA", "CNAME"):
+                    connection = http.client.HTTPSConnection(host, timeout=10)
+                    # Preserve TLS hostname verification while bypassing system DNS.
+                    connection._create_connection = lambda address, timeout, source_address=None: socket.create_connection(
+                        (endpoint, 443), timeout, source_address)
+                    try:
+                        connection.request("GET", path + "?" + urlencode({"name": domain, "type": kind}),
+                                           headers={"Accept": "application/dns-json"})
+                        response = connection.getresponse()
+                        if response.status != 200:
+                            raise OSError("DNS service unavailable")
+                        result = json.loads(response.read())
+                    finally:
+                        connection.close()
+                    if not isinstance(result, dict) or not isinstance(result.get("Answer", []), list):
+                        raise ValueError("Malformed DNS response")
+                    statuses.append(result["Status"])
+                    for answer in result.get("Answer", []):
+                        if not isinstance(answer, dict):
+                            raise ValueError("Malformed DNS answer")
+                        has_alias = has_alias or answer["type"] == 5
+                        if answer["type"] in (1, 28):
+                            addresses.append(str(ipaddress.ip_address(answer["data"])))
+                if addresses and all(status == 0 for status in statuses):
+                    return list(dict.fromkeys(addresses))
+                if not addresses and not has_alias and (statuses == [0, 0, 0] or statuses == [3, 3, 3]):
+                    negatives += 1
+                    # Retry the provider's second address before accepting a negative.
+                    if endpoint == endpoints[-1]:
+                        break
+                else:
+                    raise OSError("DNS response inconclusive")
+            except (OSError, ValueError, KeyError, TypeError, http.client.HTTPException):
+                continue
+    if negatives == 4:
+        raise OSError("no addresses returned by Cloudflare and Google")
+    raise OSError("public DNS checks inconclusive")
+
+
+def public_connection(connection_type, host, **kwargs):
+    connection = connection_type(host, **kwargs)
+    def connect(address, timeout, source_address=None):
+        last_error = None
+        for ip in dns_addresses(address[0]):
+            try:
+                return socket.create_connection((ip, address[1]), timeout, source_address)
+            except OSError as error:
+                last_error = error
+        raise last_error or OSError("No reachable address")
+    connection._create_connection = connect
+    return connection
+
+
+class PublicHTTPSHandler(HTTPSHandler):
+    def https_open(self, request):
+        return self.do_open(lambda host, **kwargs: public_connection(
+            http.client.HTTPSConnection, host, **kwargs), request,
+            context=self._context)
+
+
+class PublicHTTPHandler(HTTPHandler):
+    def http_open(self, request):
+        return self.do_open(lambda host, **kwargs: public_connection(
+            http.client.HTTPConnection, host, **kwargs), request)
+
+
+def review(records, emit=None):
     """Network signals are review prompts, never ownership determinations."""
     findings = []
     checked_sources = {}
+    opener = build_opener(ProxyHandler({}), PublicHTTPHandler(), PublicHTTPSHandler())
     for entry in records:
+        previous_count = len(findings)
         domain = entry["domain"]
         age = (date.today() - date.fromisoformat(str(entry["verified_on"]))).days
         if age > 90:
             findings.append(f"{domain}: verification is {age} days old")
         try:
-            socket.getaddrinfo(domain, 443, type=socket.SOCK_STREAM)
-        except OSError:
-            findings.append(f"{domain}: DNS address lookup failed; check manually")
+            dns_addresses(domain)
+        except OSError as error:
+            findings.append(f"{domain}: {error}; check manually")
         for source in entry["sources"]:
             url = source["url"]
             if url not in checked_sources:
                 try:
                     request = Request(url, headers={"User-Agent": "domain-blocklists-review/1.0"})
-                    with urlopen(request, timeout=15) as response:
+                    with opener.open(request, timeout=15) as response:
                         checked_sources[url] = (
                             "source redirected; confirm evidence manually"
                             if response.geturl() != url else None)
-                except (OSError, ValueError):
+                except (OSError, ValueError, http.client.HTTPException):
                     checked_sources[url] = "source unavailable; check manually"
             if checked_sources[url]:
                 findings.append(f"{domain}: {checked_sources[url]} ({url})")
+        if emit:
+            for finding in findings[previous_count:]:
+                emit(finding)
     return findings
+
+
+def select_records(datasets, domains, offset, limit, include_related=False):
+    """Select a stable, small work unit without loading all records into a prompt."""
+    rows = [{"list": name, **entry} for name, records in datasets.items() for entry in records]
+    coverage = []
+    if domains:
+        for domain in dict.fromkeys(domains):
+            parents = [row["domain"] for row in rows
+                       if domain == row["domain"] or domain.endswith("." + row["domain"])]
+            descendants = [row["domain"] for row in rows if row["domain"].endswith("." + domain)]
+            coverage.append({"domain": domain, "covered_by": sorted(set(parents)),
+                             "listed_descendants": sorted(set(descendants))})
+        if include_related:
+            matched = {name for item in coverage
+                       for name in item["covered_by"] + item["listed_descendants"]}
+        else:
+            matched = set(domains)
+            missing = matched - {row["domain"] for row in rows}
+            if missing:
+                raise ValueError("No exact record for: " + ", ".join(sorted(missing)))
+        rows = [row for row in rows if row["domain"] in matched]
+    total = len(rows)
+    selected = rows[offset:] if limit is None else rows[offset:offset + limit]
+    next_offset = offset + len(selected)
+    return {"matching_records": total, "offset": offset,
+            "next_offset": next_offset if next_offset < total else None,
+            "coverage": coverage, "records": selected}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("build", "check", "review"))
+    parser.add_argument("command", choices=("build", "check", "review", "inspect"))
+    parser.add_argument("--list", dest="list_name", help="Select one dataset (inspect/review only)")
+    parser.add_argument("--domain", action="append", default=[], help="Select a hostname; repeatable")
+    parser.add_argument("--offset", type=int, default=0, help="Skip records in sorted order")
+    parser.add_argument("--limit", type=int, help="Maximum records; inspect defaults to 5")
     args = parser.parse_args()
+    if args.offset < 0 or (args.limit is not None and args.limit < 1):
+        parser.error("offset must be nonnegative and limit must be positive")
+    if args.command in ("build", "check") and (
+            args.list_name or args.domain or args.offset or args.limit is not None):
+        parser.error("build/check always cover all lists; selection requires inspect/review")
     try:
         paths = sorted((ROOT / "data").glob("*.yaml"))
         if not paths:
             raise ValueError("No datasets found")
         datasets = {path.stem: load_records(path) for path in paths}
+        if any(not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name) for name in datasets):
+            raise ValueError("Invalid dataset filename")
+        if args.list_name:
+            if args.list_name not in datasets:
+                raise ValueError(f"Unknown list: {args.list_name}")
+            datasets = {args.list_name: datasets[args.list_name]}
+        if any(not valid_domain(domain) for domain in args.domain):
+            raise ValueError("--domain requires a lowercase hostname, without a URL or wildcard")
+        if args.command in ("inspect", "review"):
+            limit = 5 if args.command == "inspect" and args.limit is None else args.limit
+            packet = select_records(datasets, args.domain, args.offset, limit,
+                                    include_related=args.command == "inspect")
+            if args.command == "inspect":
+                packet["dataset_sha256"] = {path.stem: hashlib.sha256(path.read_bytes()).hexdigest()
+                                            for path in paths if path.stem in datasets}
+                print(json.dumps(packet, default=str, ensure_ascii=False, indent=2))
+                return 0
+            if not packet["records"] and packet["matching_records"]:
+                raise ValueError("No records selected; offset is past the end")
+            datasets = {name: [row for row in packet["records"] if row["list"] == name]
+                        for name in datasets}
         expected = {}
         findings = []
         for name, records in datasets.items():
-            if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
-                raise ValueError(f"Invalid dataset filename: {name}")
             if args.command == "review":
-                findings.extend(review(records))
+                findings.extend(review(records, emit=lambda finding: print(f"- {finding}", flush=True)))
             else:
                 for filename, content in exports(records).items():
                     expected[ROOT / "lists" / name / filename] = content.encode("utf-8")
@@ -160,10 +307,13 @@ def main():
                 if path not in expected:
                     findings.append(f"Unexpected export: {path.relative_to(ROOT)}")
         for finding in findings:
-            print(f"- {finding}")
+            if args.command != "review":
+                print(f"- {finding}")
         total = sum(map(len, datasets.values()))
         print(f"{args.command}: {len(datasets)} list(s), {total} verified record(s), {len(findings)} finding(s)")
         if args.command == "review":
+            print(f"Selection: {total} of {packet['matching_records']} matching record(s); "
+                  f"next offset: {packet['next_offset']}")
             print("Availability checks do not verify ownership or continued evidential support.")
         return 1 if findings else 0
     except (OSError, ValueError, yaml.YAMLError) as error:

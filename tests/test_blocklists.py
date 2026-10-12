@@ -1,6 +1,9 @@
 from copy import deepcopy
+from contextlib import redirect_stdout, redirect_stderr
 from datetime import date, timedelta
 import importlib.util
+import io
+import json
 from pathlib import Path
 import socket
 import tempfile
@@ -97,27 +100,176 @@ class BlocklistsTests(unittest.TestCase):
                 (root / "lists" / "headout" / "old.txt").write_text("")
                 self.assertEqual(app.main(), 1)
 
-    @patch.object(app, "urlopen")
-    @patch.object(app.socket, "getaddrinfo")
+    @patch.object(app, "build_opener")
+    @patch.object(app, "dns_addresses")
     def test_review_flags_uncertainty_without_mutating_data(self, dns, fetch):
         entry = record()
         entry["verified_on"] = (date.today() - timedelta(days=91)).isoformat()
         original = deepcopy(entry)
         dns.side_effect = socket.gaierror("unavailable")
-        fetch.side_effect = OSError("unavailable")
+        fetch.return_value.open.side_effect = OSError("unavailable")
         findings = app.review([entry])
         self.assertEqual(len(findings), 3)
         self.assertEqual(entry, original)
 
-    @patch.object(app, "urlopen")
-    @patch.object(app.socket, "getaddrinfo")
+    @patch.object(app, "build_opener")
+    @patch.object(app, "dns_addresses")
     def test_review_flags_redirects(self, dns, fetch):
         response = MagicMock()
         response.geturl.return_value = "https://example.com/replacement"
-        fetch.return_value.__enter__.return_value = response
+        fetch.return_value.open.return_value.__enter__.return_value = response
         self.assertIn("redirected", app.review([record()])[0])
         response.geturl.return_value = "https://example.com/legal"
         self.assertEqual(app.review([record()]), [])
+
+    @patch.object(app, "build_opener")
+    @patch.object(app, "dns_addresses")
+    def test_review_emits_findings_before_later_failure(self, dns, fetch):
+        emitted = []
+        dns.side_effect = [OSError("inconclusive"), RuntimeError("interrupted")]
+        fetch.return_value.open.side_effect = OSError("unavailable")
+        with self.assertRaises(RuntimeError):
+            app.review([record("a.example.com"), record("b.example.com")], emit=emitted.append)
+        self.assertEqual(len(emitted), 2)
+        self.assertTrue(all(line.startswith("a.example.com:") for line in emitted))
+
+
+class SelectionTests(unittest.TestCase):
+    def test_coverage_respects_label_and_shared_service_boundaries(self):
+        records = [record("tenant.example.com"), record("whole.example")]
+        result = app.select_records({"test": records}, ["x.tenant.example.com", "example.com",
+                                    "nottenant.example.com", "whole.example"], 0, 5, True)
+        self.assertEqual(result["coverage"][0]["covered_by"], ["tenant.example.com"])
+        self.assertEqual(result["coverage"][1]["covered_by"], [])
+        self.assertEqual(result["coverage"][1]["listed_descendants"], ["tenant.example.com"])
+        self.assertEqual(result["coverage"][2]["covered_by"], [])
+        self.assertEqual(result["coverage"][3]["covered_by"], ["whole.example"])
+
+    def test_pagination_does_not_skip_or_duplicate_records(self):
+        records = [record(f"host{i}.example") for i in range(12)]
+        gathered, offset = [], 0
+        while offset is not None:
+            packet = app.select_records({"test": records}, [], offset, 5)
+            gathered.extend(packet["records"])
+            offset = packet["next_offset"]
+        self.assertEqual([r["domain"] for r in gathered], [r["domain"] for r in records])
+
+    def test_review_rejects_unknown_exact_record(self):
+        with self.assertRaisesRegex(ValueError, "No exact record"):
+            app.select_records({"test": [record()]}, ["missing.example"], 0, 5)
+
+    def test_cli_packet_default_limit_and_dataset_fingerprint(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "data").mkdir()
+            path = root / "data" / "test.yaml"
+            path.write_text(yaml.safe_dump([record(f"host{i}.example") for i in range(8)]))
+            output = io.StringIO()
+            with patch.object(app, "ROOT", root), patch("sys.argv", ["script", "inspect"]), redirect_stdout(output):
+                self.assertEqual(app.main(), 0)
+            packet = json.loads(output.getvalue())
+            self.assertEqual(len(packet["records"]), 5)
+            self.assertEqual(packet["next_offset"], 5)
+            self.assertEqual(packet["matching_records"], 8)
+            self.assertEqual(packet["dataset_sha256"]["test"], app.hashlib.sha256(path.read_bytes()).hexdigest())
+            self.assertFalse((root / "lists").exists())
+
+    def test_cli_rejects_invalid_selection_and_partial_build(self):
+        for args in [("inspect", "--limit", "0"), ("review", "--offset", "-1"),
+                     ("build", "--list", "test"), ("check", "--domain", "a.example")]:
+            with self.subTest(args=args), patch("sys.argv", ["script", *args]), redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit) as error:
+                    app.main()
+                self.assertEqual(error.exception.code, 2)
+
+    @patch.object(app, "review", return_value=[])
+    def test_cli_review_only_checks_selected_records(self, review):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "data").mkdir()
+            (root / "data" / "test.yaml").write_text(yaml.safe_dump([record("a.example"), record("b.example")]))
+            with patch.object(app, "ROOT", root), patch("sys.argv", ["script", "review", "--list", "test", "--offset", "1", "--limit", "1"]), redirect_stdout(io.StringIO()):
+                self.assertEqual(app.main(), 0)
+            self.assertEqual([r["domain"] for r in review.call_args.args[0]], ["b.example"])
+
+
+class PublicDNSTests(unittest.TestCase):
+    def setUp(self):
+        app.dns_addresses.cache_clear()
+
+    @patch.object(app.http.client, "HTTPSConnection")
+    def test_retries_primary_then_uses_independent_provider(self, connection):
+        import json
+        reply = MagicMock(status=200)
+        reply.read.return_value = json.dumps({"Status": 0, "Answer": [
+            {"type": 1, "data": "192.0.2.1"}]}).encode()
+        primary = MagicMock()
+        primary.request.side_effect = OSError("unavailable")
+        secondary = MagicMock()
+        secondary.getresponse.return_value = reply
+        connection.side_effect = [primary, primary, secondary, secondary, secondary]
+        self.assertEqual(app.dns_addresses("test.example"), ["192.0.2.1"])
+        self.assertEqual([call.args[0] for call in connection.call_args_list],
+                         ["cloudflare-dns.com"] * 2 + ["dns.google"] * 3)
+
+    @patch.object(app.http.client, "HTTPSConnection")
+    def test_negative_requires_both_addresses_of_both_providers(self, connection):
+        reply = MagicMock(status=200)
+        reply.read.return_value = b'{"Status": 3}'
+        connection.return_value.getresponse.return_value = reply
+        with self.assertRaisesRegex(OSError, "Cloudflare and Google"):
+            app.dns_addresses("missing.example")
+        self.assertEqual(connection.call_count, 12)
+
+    @patch.object(app.http.client, "HTTPSConnection")
+    def test_single_provider_negative_and_other_failure_is_inconclusive(self, connection):
+        reply = MagicMock(status=200)
+        reply.read.return_value = b'{"Status": 3}'
+        primary = MagicMock()
+        primary.getresponse.return_value = reply
+        secondary = MagicMock()
+        secondary.request.side_effect = OSError("unavailable")
+        connection.side_effect = [primary] * 6 + [secondary] * 2
+        with self.assertRaisesRegex(OSError, "inconclusive"):
+            app.dns_addresses("test.example")
+
+    @patch.object(app.http.client, "HTTPSConnection")
+    def test_alias_only_and_malformed_answers_are_inconclusive(self, connection):
+        for payload in [{"Status": 0, "Answer": [{"type": 5, "data": "target.example"}]},
+                        [], {"Status": 0, "Answer": [None]}, {"Status": 2}]:
+            with self.subTest(payload=payload):
+                reply = MagicMock(status=200)
+                reply.read.return_value = json.dumps(payload).encode()
+                connection.return_value.getresponse.return_value = reply
+                with self.assertRaisesRegex(OSError, "inconclusive"):
+                    app.dns_addresses("alias.example")
+
+    @patch.object(app.socket, "create_connection")
+    @patch.object(app.http.client, "HTTPSConnection")
+    def test_doh_connects_to_public_ip_with_original_tls_host(self, connection, connect):
+        reply = MagicMock(status=200)
+        reply.read.return_value = b'{"Status": 3}'
+        def make_connection(host, **kwargs):
+            instance = MagicMock()
+            instance.request.side_effect = lambda *args, **kw: instance._create_connection((host, 443), 10)
+            instance.getresponse.return_value = reply
+            return instance
+        connection.side_effect = make_connection
+        with self.assertRaises(OSError):
+            app.dns_addresses("missing.example")
+        endpoints = [call.args[0] for call in connect.call_args_list]
+        self.assertEqual(endpoints, [(ip, 443) for ip in ("1.1.1.1", "1.0.0.1", "8.8.8.8", "8.8.4.4") for _ in range(3)])
+
+    @patch.object(app.socket, "create_connection")
+    @patch.object(app, "dns_addresses", return_value=["192.0.2.1", "2001:db8::1"])
+    def test_web_connection_retries_addresses_and_keeps_tls_hostname(self, dns, connect):
+        connect.side_effect = [OSError("unreachable"), MagicMock()]
+        connection = app.public_connection(app.http.client.HTTPSConnection, "legal.example", timeout=15)
+        self.assertEqual(connection.host, "legal.example")
+        connection._create_connection(("legal.example", 443), 15)
+        dns.assert_called_once_with("legal.example")
+        self.assertEqual([call.args[0] for call in connect.call_args_list],
+                         [("192.0.2.1", 443), ("2001:db8::1", 443)])
 
 
 if __name__ == "__main__":
