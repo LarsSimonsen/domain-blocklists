@@ -26,6 +26,7 @@ jobs:
 
   review:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    needs: validate
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -38,7 +39,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          python scripts/blocklists.py review 2>&1 | tee review.txt
+          python -u scripts/blocklists.py review 2>&1 | tee review.txt
       - name: Attach review summary
         if: always()
         shell: bash
@@ -49,3 +50,11 @@ jobs:
             python -c "import html; from pathlib import Path; print(html.escape(Path('review.txt').read_text()))" >> "$GITHUB_STEP_SUMMARY"
             echo '</pre>' >> "$GITHUB_STEP_SUMMARY"
           fi
+      - name: Save review findings, including partial runs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: monthly-review
+          path: review.txt
+          if-no-files-found: ignore
+          retention-days: 30

@@ -74,6 +74,24 @@ Commit the YAML changes and regenerated exports together in a pull request. The 
 
 One GitHub Actions workflow also runs monthly and on manual request. `python scripts/blocklists.py review` checks DNS address resolution, source availability/redirects, and verification dates older than 90 days. Findings appear in the run summary and fail the review job so GitHub can notify subscribers according to their notification settings. It never edits records or publishes changes. A successful response does not prove that a page still supports inclusion; the page content must be reverified under the rules above. DNS failures and HTTP blocks can be temporary. Scheduled runs begin after the workflow is merged into the default branch.
 
+### Small-context updates
+
+The repository's [domain-update skill](.agents/skills/domain-update/SKILL.md) guides additions, corrections, and reverification in small work units. KISS and YAGNI apply: reuse the existing script and schema; add machinery only for a demonstrated need.
+
+Read a small JSON packet instead of sending the entire dataset to a model:
+
+```sh
+python scripts/blocklists.py inspect --list headout --offset 0 --limit 5
+python scripts/blocklists.py inspect --list headout --domain tickets.example.com
+python scripts/blocklists.py review --list headout --offset 0 --limit 5
+```
+
+`inspect` is offline and defaults to five records. A domain query reports existing coverage and listed descendants, including the dedicated-hostname boundary. It does not verify a candidate or authorize broadening a block. Domain arguments must be lowercase hostnames and may be repeated. Follow `next_offset` until it is null. Save the dataset fingerprint with any pagination checkpoint; if the data changes, reconcile completed hostnames and restart pagination to avoid skipping records. `review --domain` selects exact existing records only. An unfiltered `review` still checks all records; `build` and `check` always cover every list.
+
+Keep candidate evidence and progress outside the repository. Checkpoint after each batch and continue the requested scope; five records is a context limit, not a completeness claim. Updating named records does not require starting a new exhaustive search. Requests to discover more Headout domains retain the exhaustive discovery workflow unless the user asks for a bounded pass.
+
+The monthly review waits for validation and streams findings as each record finishes. Its text report is also saved as a workflow artifact, including partial findings when the upload step can run after a failure. Availability signals remain prompts for review, not automatic evidence decisions.
+
 ## Meaning of inclusion
 
 Inclusion means that a domain meets the stated criteria of a particular list. It does not, by itself, imply malicious, fraudulent, or unlawful activity.
