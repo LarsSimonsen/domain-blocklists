@@ -7,6 +7,23 @@ description: Add, correct, or reverify domain-blocklist records in small batches
 
 Use the current model. One model can discover evidence and verify it in separate passes; an expensive model or subagent is not required.
 
+## Execution requirements
+
+- **Profile:** Local candidate for bounded named-record updates.
+- **Local scope:** Process the requested candidates in batches of about five or fewer, retaining the
+  separate evidence-verification pass. Complete all requested batches.
+- **Context:** AGENTS.md, selected-list criteria/schema, current records, complete relevant evidence
+  context, DNS/retrieval receipts, and the current checkpoint. Do not load the full dataset.
+- **Tools:** Approved-resolver DNS checks, live HTTPS/browser retrieval, Python, and repository access;
+  Git/PR tools when publication is authorized.
+- **Validation:** Apply the ownership/operation and hostname-boundary criteria, then run build, check,
+  tests, and diff review. Structural checks do not establish ownership.
+- **Escalation:** Keep ambiguous legal-entity scope, redirect-only evidence, shared-provider boundaries, and
+  inconclusive retrieval outside the dataset. Seek stronger review or the existing human-review route without
+  weakening inclusion criteria.
+- **Qualification:** Local candidate; qualify using both clear inclusions and misleading affiliate,
+  redirect, supplier, and shared-host examples.
+
 ## Load one work unit
 
 Read AGENTS.md and the selected list's inclusion criteria and record schema in README.md. Do not load the whole dataset, script, tests, or discovery references into context for a normal data update.
