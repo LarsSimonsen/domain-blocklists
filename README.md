@@ -8,7 +8,7 @@ Each list has a defined purpose, documented inclusion criteria, and supporting e
 
 | List | Scope | Status |
 | --- | --- | --- |
-| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified expanded set: 578 entries |
+| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified expanded set: 579 entries |
 
 Additional lists may be added over time, each with its own scope and inclusion criteria.
 

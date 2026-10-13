@@ -1639,6 +1639,12 @@
   sources:
     - url: https://www.topkapipalace-tickets.com/company-details/
       evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: toulouse-tickets.com
+  relationship: operated
+  verified_on: '2026-10-13'
+  sources:
+    - url: https://www.toulouse-tickets.com/company-details/
+      evidence: The live Company details page identifies Headout Inc. as the legal entity for this website, with registration number 5541011 and legal contact.
 - domain: tours-alicante.com
   relationship: operated
   verified_on: '2026-09-04'
