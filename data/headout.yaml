@@ -3476,3 +3476,10 @@
   sources:
     - url: https://www.zoomarinealgarvetickets.com/company-details/
       evidence: The live Company details page identifies Headout Inc. as the legal entity for this website, with registration number 5541011 and legal contact.
+
+- domain: walkingtoursdubrovnik.com
+  relationship: operated
+  verified_on: '2026-10-14'
+  sources:
+    - url: https://www.walkingtoursdubrovnik.com/company-details/
+      evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
