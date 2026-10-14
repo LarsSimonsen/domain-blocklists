@@ -1,5 +1,5 @@
 ! Generated from verified records; do not edit.
-! Entries: 579; includes descendants of each listed name.
+! Entries: 580; includes descendants of each listed name.
 ||abudhabi-tickets.com^
 ||abudhabitickets.com^
 ||acropolis-tickets.com^
@@ -560,6 +560,7 @@
 ||viterbo-tickets.com^
 ||vloretickets.com^
 ||waitomo-tours.com^
+||walkingtoursdubrovnik.com^
 ||warsawtickets.com^
 ||washingtondc-tickets.com^
 ||wellington-tours.com^
