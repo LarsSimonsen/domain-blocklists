@@ -254,6 +254,28 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(len(lines[1]), 2 + 200)
         self.assertEqual(fetch.return_value.open.call_count, 1)
 
+    @patch.object(app, "build_opener")
+    @patch.object(app, "dns_addresses", return_value=["192.0.2.1"])
+    def test_cli_candidate_reports_challenges_as_unavailable(self, dns, fetch):
+        def page(url, status, body):
+            manager = MagicMock()
+            manager.__enter__.return_value = MagicMock(status=status, **{
+                "geturl.return_value": url, "read.return_value": body})
+            return manager
+        fetch.return_value.open.side_effect = [
+            page("https://a.example/legal", 202, b""),
+            HTTPError("https://b.example/legal", 429, "Too Many Requests", {}, io.BytesIO(b"<p>Slow down.</p>")),
+            page("https://c.example/legal", 202, b"<p>Subject Ltd.</p>")]
+        output = io.StringIO()
+        with patch("sys.argv", ["script", "candidate", "--path", "/legal", "--expect", "Subject",
+                                "--domain", "a.example", "--domain", "b.example", "--domain", "c.example"]), redirect_stdout(output):
+            self.assertEqual(app.main(), 1)
+        lines = output.getvalue().splitlines()
+        self.assertEqual(lines[0], "a.example: unavailable https://a.example/legal (challenge status 202)")
+        self.assertEqual(lines[1], "b.example: unavailable https://b.example/legal (challenge status 429)")
+        self.assertEqual(lines[2], "c.example: hit https://c.example/legal final https://c.example/legal "
+                                   "status 202 subject named")
+
     def test_add_inserts_sorted_and_leaves_other_records_untouched(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "test.yaml"

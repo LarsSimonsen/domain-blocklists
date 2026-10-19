@@ -57,6 +57,7 @@ hostname,lane,source,status,attempts,requested_url,final_url,http_status,retriev
    - `covered_by` non-empty in the inspect packet: `rejected`, already blocked.
    - `unresolved`: `rejected`, both Cloudflare and Google agree.
    - `inconclusive` or `unavailable`: `retry`, never rejected.
+     An empty HTTP 202 or a 429 is a rate-limit or bot challenge and reports `unavailable`; pause the batch before retrying.
    - `miss`: `rejected`, the page does not name the subject.
    - `redirected`: the final hostname is outside the requested name and its descendants. `rejected`, or `retry` with the target queued as its own candidate. A redirect within the name, such as to `www`, stays a `hit` or `miss`.
    - `hit`: `hit`, queued for reading.
