@@ -349,6 +349,10 @@ def candidate(domains, path, expect, emit=print):
             failures += 1
             emit(f"{domain}: unavailable {url} ({error})")
             continue
+        if status == 429 or (status == 202 and not body.strip()):
+            failures += 1  # A rate limit or bot challenge is a retry case, not a page.
+            emit(f"{domain}: unavailable {url} (challenge status {status})")
+            continue
         lines = page_lines(body)
         index = next((i for i, line in enumerate(lines) if needle in line.casefold()), None)
         host = urlsplit(final).hostname or ""
