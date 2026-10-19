@@ -62,7 +62,7 @@ hostname,lane,source,status,attempts,requested_url,final_url,http_status,retriev
    - `redirected`: the final hostname is outside the requested name and its descendants. `rejected`, or `retry` with the target queued as its own candidate. A redirect within the name, such as to `www`, stays a `hit` or `miss`.
    - `hit`: `hit`, queued for reading.
 4. **Read hits.** For each `hit`, open the final URL, read the legal statement in context, and answer exactly one of `owned`, `operated`, `dedicated-hostname`, or `reject`, using the definitions in the domain-update skill. A keyword hit is a filter result, not a decision. When unsure, answer `reject` and record why.
-5. **Write packets** for non-reject answers in the record schema from the domain-update skill, with `verified_on` set to today, and set the row to `packet`.
+5. **Write packets** for non-reject answers in the record schema from the domain-update skill, with `verified_on` set to today's UTC date, and set the row to `packet`.
 6. **Hand off** packets in batches of five to the domain-update skill, set the rows to `handed-off`, and checkpoint the ledger.
 7. **Retry and saturation.** Rerun step 3 on the `retry` rows after the retry rules in AGENTS.md. In exhaustive mode, repeat steps 2 to 6 once more after every lane is done; stop when that cycle yields no `hit`.
 

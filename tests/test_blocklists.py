@@ -1,6 +1,6 @@
 from copy import deepcopy
 from contextlib import redirect_stdout, redirect_stderr
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 import importlib.util
 import io
 import json
@@ -21,7 +21,7 @@ spec.loader.exec_module(app)
 
 def record(domain="tenant.example.com"):
     return {"domain": domain, "relationship": "dedicated-hostname",
-            "verified_on": date.today().isoformat(),
+            "verified_on": app.utc_today().isoformat(),
             "sources": [{"url": "https://example.com/legal",
                          "evidence": "Synthetic evidence for tests only."}]}
 
@@ -57,6 +57,18 @@ class BlocklistsTests(unittest.TestCase):
             entry["sources"] = [source]
             with self.assertRaises(ValueError):
                 self.load([entry])
+
+    def test_verification_dates_use_the_utc_day(self):
+        # 00:30 on 2026-10-20 in UTC+2 is still 2026-10-19 in UTC.
+        now = datetime(2026, 10, 19, 22, 30, tzinfo=timezone.utc)
+        clock = MagicMock(wraps=datetime)
+        clock.now.side_effect = lambda tz=None: now.astimezone(tz)
+        with patch.object(app, "datetime", clock):
+            self.assertEqual(app.utc_today(), date(2026, 10, 19))
+            self.assertEqual(self.load([{**record(), "verified_on": "2026-10-19"}])[0]["domain"],
+                             "tenant.example.com")
+            with self.assertRaises(ValueError):
+                self.load([{**record(), "verified_on": "2026-10-20"}])
 
     def test_rejects_discovery_provenance_notes(self):
         entry = record()
@@ -105,7 +117,7 @@ class BlocklistsTests(unittest.TestCase):
     @patch.object(app, "dns_addresses")
     def test_review_flags_uncertainty_without_mutating_data(self, dns, fetch):
         entry = record()
-        entry["verified_on"] = (date.today() - timedelta(days=91)).isoformat()
+        entry["verified_on"] = (app.utc_today() - timedelta(days=91)).isoformat()
         original = deepcopy(entry)
         dns.side_effect = socket.gaierror("unavailable")
         fetch.return_value.open.side_effect = OSError("unavailable")
@@ -290,8 +302,8 @@ class SelectionTests(unittest.TestCase):
                 self.assertIn("- domain: " + block, after)
             records = app.load_records(path)
             self.assertEqual([r["domain"] for r in records], ["b.example", "c.example", "d.example"])
-            self.assertEqual(str(records[1]["verified_on"]), date.today().isoformat())
-            self.assertIn("verified_on: '" + date.today().isoformat() + "'", after)
+            self.assertEqual(str(records[1]["verified_on"]), app.utc_today().isoformat())
+            self.assertIn("verified_on: '" + app.utc_today().isoformat() + "'", after)
             self.assertIn("    - url: https://c.example/legal", after)
             for bad in [packet, {**packet, "domain": "e.example", "extra": 1},
                         {**packet, "domain": "e.example", "relationship": "partner"},
