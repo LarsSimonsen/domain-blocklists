@@ -1,7 +1,7 @@
 """Inspect verified records, validate YAML, add records, generate exports, preflight DNS, filter candidates, or flag review needs."""
 
 import argparse
-from datetime import date
+from datetime import date, datetime, timezone
 from functools import lru_cache
 import hashlib
 import ipaddress
@@ -51,6 +51,11 @@ def valid_domain(value):
             and all(LABEL.fullmatch(label) for label in labels))
 
 
+def utc_today():
+    """Verification dates are UTC days, so check gives the same answer on every machine."""
+    return datetime.now(timezone.utc).date()
+
+
 def load_records(path):
     return validate_records(yaml.load(path.read_text(encoding="utf-8"), Loader=UniqueLoader), str(path))
 
@@ -75,7 +80,7 @@ def validate_records(records, label):
         if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw_date):
             raise ValueError(f"{domain}: verified_on must be YYYY-MM-DD")
         verified = date.fromisoformat(raw_date)
-        if verified > date.today():
+        if verified > utc_today():
             raise ValueError(f"{domain}: verification date is in the future")
         if "notes" in entry:
             notes = entry["notes"]
@@ -198,7 +203,7 @@ def review(records, emit=None):
     for entry in records:
         previous_count = len(findings)
         domain = entry["domain"]
-        age = (date.today() - date.fromisoformat(str(entry["verified_on"]))).days
+        age = (utc_today() - date.fromisoformat(str(entry["verified_on"]))).days
         if age > 90:
             findings.append(f"{domain}: verification is {age} days old")
         try:
@@ -244,7 +249,7 @@ def add_records(path, packets, replace=False):
         if not isinstance(packet, dict) or not isinstance(packet.get("domain"), str):
             raise ValueError("each record must be an object with a domain")
         record = {"domain": packet["domain"], "relationship": packet.get("relationship"),
-                  "verified_on": str(packet.get("verified_on") or date.today().isoformat()),
+                  "verified_on": str(packet.get("verified_on") or utc_today().isoformat()),
                   "sources": packet.get("sources")}
         if "notes" in packet:
             record["notes"] = packet["notes"]

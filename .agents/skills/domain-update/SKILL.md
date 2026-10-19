@@ -35,7 +35,7 @@ An evidence packet is one JSON object in the record schema. It is the same objec
 }
 ```
 
-`verified_on` is the day the verifier read the page. `notes` is optional and only for a material blocking-boundary clarification. Write `evidence` in your own words; do not paste the page.
+`verified_on` is the UTC date on which the verifier read the page; `check` rejects later dates on every machine, including CI. `notes` is optional and only for a material blocking-boundary clarification. Write `evidence` in your own words; do not paste the page.
 
 ## Rules that are never relaxed
 
@@ -57,7 +57,7 @@ An evidence packet is one JSON object in the record schema. It is the same objec
    - `operated`: the page names the subject as the legal entity of this website. Repeating the hostname is not required.
    - `dedicated-hostname`: the hostname is dedicated to the subject on a shared service and the page says so for that hostname.
    - `reject`: anything else, including supplier or affiliate mentions, branding, a redirect, infrastructure, a search snippet, ambiguous scope, or failed retrieval.
-5. **Write the packet** for every non-reject answer, with `verified_on` set to today.
+5. **Write the packet** for every non-reject answer, with `verified_on` set to today's UTC date.
 6. **Verify.** Hand the packet to the verifier. The verifier repeats steps 3 and 4 from the final URL and answers `confirm` or `reject`. Only `confirm` continues. Other lists may have different criteria; the verifier applies the list's own.
 7. **Apply.** Pipe the confirmed packets to `python scripts/blocklists.py add --list headout` as one object or a JSON list on stdin. For reverification of an existing record add `--replace`. The command refuses duplicates without `--replace`, unknown fields, invalid dates, and anything `check` would reject, and it leaves the file untouched on error.
 8. **Build and check.** Run `python scripts/blocklists.py build`, then `check`, then `python -m unittest discover -s tests`.
