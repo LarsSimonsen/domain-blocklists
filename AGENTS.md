@@ -2,7 +2,7 @@
 
 - Keep this project small: one YAML dataset per list, one Python script, generated exports, one workflow. Avoid frameworks and extra dependencies without a concrete need.
 - Apply KISS (Keep It Simple, Stupid): prefer the smallest clear solution. Apply YAGNI (You Aren't Gonna Need It): implement current requirements, not speculative abstractions, configuration, or features.
-- For domain additions, corrections, and reverification, follow `.agents/skills/domain-update/SKILL.md`. Load only the selected records and the reference needed for the current work unit; do not read the whole dataset into model context.
+- For domain additions, corrections, and reverification, follow `.agents/skills/domain-update/SKILL.md`; for finding new candidates, follow `.agents/skills/domain-discovery/SKILL.md`. Load only the selected records and the reference needed for the current work unit; do not read the whole dataset into model context.
 - The root README covers the broader project; Headout is only the initial list.
 - Follow the inclusion criteria in README.md. Require direct public evidence and a verification date. Automated verification is sufficient when a retrieved live page explicitly states that the exact website or hostname is owned by the list subject, or identifies the list subject as the website's legal entity. Legal-entity evidence does not need to repeat the exact hostname or explicitly state ownership. Never infer ownership from shared infrastructure, design, images, affiliate links, redirects, or search snippets.
 - Commit only verified records. Suggestions may appear in public issues without a template, but unverified research and candidates must not enter tracked datasets, notes, or exports.

@@ -1,4 +1,4 @@
-"""Inspect verified records, validate YAML, generate exports, or flag review needs."""
+"""Inspect verified records, validate YAML, generate exports, preflight DNS, or flag review needs."""
 
 import argparse
 from datetime import date
@@ -248,9 +248,22 @@ def select_records(datasets, domains, offset, limit, include_related=False):
             "coverage": coverage, "records": selected}
 
 
+def resolve(domains, emit=print):
+    """Preflight hostnames through the approved resolvers; receipts, not ownership."""
+    failures = 0
+    for domain in dict.fromkeys(domains):
+        try:
+            emit(f"{domain}: resolved {' '.join(dns_addresses(domain))}")
+        except OSError as error:
+            failures += 1
+            state = "unresolved" if "Cloudflare and Google" in str(error) else "inconclusive"
+            emit(f"{domain}: {state} ({error})")
+    return failures
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("build", "check", "review", "inspect"))
+    parser.add_argument("command", choices=("build", "check", "review", "inspect", "resolve"))
     parser.add_argument("--list", dest="list_name", help="Select one dataset (inspect/review only)")
     parser.add_argument("--domain", action="append", default=[], help="Select a hostname; repeatable")
     parser.add_argument("--offset", type=int, default=0, help="Skip records in sorted order")
@@ -261,7 +274,16 @@ def main():
     if args.command in ("build", "check") and (
             args.list_name or args.domain or args.offset or args.limit is not None):
         parser.error("build/check always cover all lists; selection requires inspect/review")
+    if args.command == "resolve" and (
+            not args.domain or args.list_name or args.offset or args.limit is not None):
+        parser.error("resolve takes one or more --domain and no selection options")
     try:
+        if any(not valid_domain(domain) for domain in args.domain):
+            raise ValueError("--domain requires a lowercase hostname, without a URL or wildcard")
+        if args.command == "resolve":
+            failures = resolve(args.domain)
+            print("Resolver receipts do not verify ownership or continued evidential support.")
+            return 1 if failures else 0
         paths = sorted((ROOT / "data").glob("*.yaml"))
         if not paths:
             raise ValueError("No datasets found")
@@ -272,8 +294,6 @@ def main():
             if args.list_name not in datasets:
                 raise ValueError(f"Unknown list: {args.list_name}")
             datasets = {args.list_name: datasets[args.list_name]}
-        if any(not valid_domain(domain) for domain in args.domain):
-            raise ValueError("--domain requires a lowercase hostname, without a URL or wildcard")
         if args.command in ("inspect", "review"):
             limit = 5 if args.command == "inspect" and args.limit is None else args.limit
             packet = select_records(datasets, args.domain, args.offset, limit,
