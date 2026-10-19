@@ -1,4 +1,4 @@
-"""Inspect verified records, validate YAML, generate exports, preflight DNS, or flag review needs."""
+"""Inspect verified records, validate YAML, generate exports, preflight DNS, filter candidates, or flag review needs."""
 
 import argparse
 from datetime import date
@@ -11,6 +11,7 @@ from pathlib import Path
 import re
 import socket
 import sys
+from urllib.error import HTTPError
 from urllib.parse import urlencode, urlsplit
 from urllib.request import HTTPHandler, HTTPSHandler, ProxyHandler, Request, build_opener
 
@@ -248,26 +249,85 @@ def select_records(datasets, domains, offset, limit, include_related=False):
             "coverage": coverage, "records": selected}
 
 
+def resolve_receipt(domain):
+    """One receipt line per hostname; addresses are None unless it resolved."""
+    try:
+        addresses = dns_addresses(domain)
+        return addresses, f"{domain}: resolved {' '.join(addresses)}"
+    except OSError as error:
+        state = "unresolved" if "Cloudflare and Google" in str(error) else "inconclusive"
+        return None, f"{domain}: {state} ({error})"
+
+
 def resolve(domains, emit=print):
     """Preflight hostnames through the approved resolvers; receipts, not ownership."""
     failures = 0
     for domain in dict.fromkeys(domains):
-        try:
-            emit(f"{domain}: resolved {' '.join(dns_addresses(domain))}")
-        except OSError as error:
+        addresses, receipt = resolve_receipt(domain)
+        failures += addresses is None
+        emit(receipt)
+    return failures
+
+
+def page_lines(body):
+    """Crude tag stripping: block tags break lines, inline tags and source newlines do not."""
+    text = re.sub(r"<(script|style)\b.*?</\1\s*>", "\n", " ".join(body.split()), flags=re.I)
+    text = re.sub(r"</?(?:p|div|br|li|h[1-6]|t[rdh]|d[tdl]|[uo]l|table|title|section|article|"
+                  r"header|footer|main|nav)\b[^>]*>", "\n", text, flags=re.I)
+    text = re.sub(r"<[^>]*>", " ", text)
+    return [" ".join(line.split()) for line in text.splitlines() if line.strip()]
+
+
+def candidate(domains, path, expect, emit=print):
+    """Discovery filter: resolve, fetch one evidence path, report whether the subject is named."""
+    failures = 0
+    needle = expect.casefold()
+    opener = build_opener(ProxyHandler({}), PublicHTTPHandler(), PublicHTTPSHandler())
+    for domain in dict.fromkeys(domains):
+        addresses, receipt = resolve_receipt(domain)
+        if addresses is None:
             failures += 1
-            state = "unresolved" if "Cloudflare and Google" in str(error) else "inconclusive"
-            emit(f"{domain}: {state} ({error})")
+            emit(receipt)
+            continue
+        url = f"https://{domain}{path}"
+        try:
+            request = Request(url, headers={"User-Agent": "domain-blocklists-candidate/1.0"})
+            try:
+                response = opener.open(request, timeout=15)
+            except HTTPError as error:
+                response = error  # An error page is still a retrieved page.
+            with response as page:
+                final, status = page.geturl(), page.status
+                body = page.read(1 << 20).decode("utf-8", "replace")
+        except (OSError, ValueError, http.client.HTTPException) as error:
+            failures += 1
+            emit(f"{domain}: unavailable {url} ({error})")
+            continue
+        lines = page_lines(body)
+        index = next((i for i, line in enumerate(lines) if needle in line.casefold()), None)
+        host = urlsplit(final).hostname or ""
+        if host != domain and not host.endswith("." + domain):
+            state = "redirected"
+        else:
+            state = "hit" if index is not None else "miss"
+        failures += state != "hit"
+        emit(f"{domain}: {state} {url} final {final} status {status} "
+             f"subject {'named' if index is not None else 'not named'}")
+        if index is not None:
+            for line in lines[max(index - 1, 0):index + 2]:
+                emit(f"  {line[:200]}")
     return failures
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("build", "check", "review", "inspect", "resolve"))
+    parser.add_argument("command", choices=("build", "check", "review", "inspect", "resolve", "candidate"))
     parser.add_argument("--list", dest="list_name", help="Select one dataset (inspect/review only)")
     parser.add_argument("--domain", action="append", default=[], help="Select a hostname; repeatable")
     parser.add_argument("--offset", type=int, default=0, help="Skip records in sorted order")
     parser.add_argument("--limit", type=int, help="Maximum records; inspect defaults to 5")
+    parser.add_argument("--path", help="Evidence path to fetch on each hostname (candidate only)")
+    parser.add_argument("--expect", help="Subject string to look for, case-insensitive (candidate only)")
     args = parser.parse_args()
     if args.offset < 0 or (args.limit is not None and args.limit < 1):
         parser.error("offset must be nonnegative and limit must be positive")
@@ -277,12 +337,24 @@ def main():
     if args.command == "resolve" and (
             not args.domain or args.list_name or args.offset or args.limit is not None):
         parser.error("resolve takes one or more --domain and no selection options")
+    if args.command == "candidate" and (
+            not args.domain or args.list_name or args.offset or args.limit is not None
+            or not args.path or not args.path.startswith("/") or any(c.isspace() for c in args.path)
+            or not args.expect or not args.expect.strip()):
+        parser.error("candidate takes one or more --domain, --path starting with /, --expect, "
+                     "and no selection options")
+    if args.command != "candidate" and (args.path or args.expect):
+        parser.error("--path and --expect apply to candidate only")
     try:
         if any(not valid_domain(domain) for domain in args.domain):
             raise ValueError("--domain requires a lowercase hostname, without a URL or wildcard")
         if args.command == "resolve":
             failures = resolve(args.domain)
             print("Resolver receipts do not verify ownership or continued evidential support.")
+            return 1 if failures else 0
+        if args.command == "candidate":
+            failures = candidate(args.domain, args.path, args.expect)
+            print("Candidate checks are filter results, not ownership decisions.")
             return 1 if failures else 0
         paths = sorted((ROOT / "data").glob("*.yaml"))
         if not paths:

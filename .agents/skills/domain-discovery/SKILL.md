@@ -46,13 +46,17 @@ Run the cheap checks on the whole queue before any model reads a page:
 
 ```sh
 python scripts/blocklists.py inspect --list headout --domain candidate.example.com
-python scripts/blocklists.py resolve --domain candidate.example.com --domain other.example.com
+python scripts/blocklists.py candidate --domain candidate.example.com --domain other.example.com --path /company-details --expect "Headout"
 ```
 
-- `covered_by` non-empty: already blocked, mark `rejected`.
+`candidate` resolves each hostname through the approved resolvers, fetches the evidence path observed in the verified set (for Headout `/company-details`) on that hostname, and prints one line per name with the requested and final URLs, the HTTP status, and whether the subject string appears, followed by up to three lines of context around the first match. Record each line in the ledger:
+
+- `covered_by` non-empty in the `inspect` packet: already blocked, mark `rejected`.
 - `unresolved`: both Cloudflare and Google agree, mark `rejected`.
-- `inconclusive`: mark `retry`, never rejected.
-- `resolved`: fetch the evidence path observed in the verified set (for Headout `/company-details`) with a client that uses the approved resolvers, recording requested and final URLs. A page that does not name the subject is `rejected`; a redirect to another hostname verifies nothing for the original name.
+- `inconclusive` or `unavailable`: mark `retry`, never rejected.
+- `miss`: the page does not name the subject, mark `rejected`.
+- `redirected`: the final hostname is outside the requested name and its descendants, which verifies nothing for the original name; mark `rejected`, or `retry` when the target itself is a new candidate. A redirect within the requested name, such as to `www`, stays a `hit` or `miss`.
+- `hit`: queue for reading.
 
 Only pages that name the subject go into a model's context, and then only the legal statement with enough surrounding text to judge scope. A keyword hit is a filter result, not a decision.
 

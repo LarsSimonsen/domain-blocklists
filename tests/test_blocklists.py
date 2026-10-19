@@ -9,6 +9,7 @@ import socket
 import tempfile
 import unittest
 from unittest.mock import patch, MagicMock
+from urllib.error import HTTPError
 
 import yaml
 
@@ -177,7 +178,10 @@ class SelectionTests(unittest.TestCase):
     def test_cli_rejects_invalid_selection_and_partial_build(self):
         for args in [("inspect", "--limit", "0"), ("review", "--offset", "-1"),
                      ("build", "--list", "test"), ("check", "--domain", "a.example"),
-                     ("resolve",), ("resolve", "--domain", "a.example", "--limit", "1")]:
+                     ("resolve",), ("resolve", "--domain", "a.example", "--limit", "1"),
+                     ("candidate", "--domain", "a.example", "--expect", "Subject"),
+                     ("candidate", "--domain", "a.example", "--path", "legal", "--expect", "Subject"),
+                     ("resolve", "--domain", "a.example", "--path", "/legal")]:
             with self.subTest(args=args), patch("sys.argv", ["script", *args]), redirect_stderr(io.StringIO()):
                 with self.assertRaises(SystemExit) as error:
                     app.main()
@@ -196,6 +200,58 @@ class SelectionTests(unittest.TestCase):
         self.assertTrue(lines[1].startswith("b.example: unresolved"))
         self.assertTrue(lines[2].startswith("c.example: inconclusive"))
         self.assertEqual(dns.call_count, 3)
+
+    @patch.object(app, "build_opener")
+    @patch.object(app, "dns_addresses")
+    def test_cli_candidate_reports_filter_results(self, dns, fetch):
+        def page(url, body):
+            manager = MagicMock()
+            manager.__enter__.return_value = MagicMock(status=200, **{
+                "geturl.return_value": url, "read.return_value": body})
+            return manager
+        dns.side_effect = [["192.0.2.1"]] * 4 + [OSError("no addresses returned by Cloudflare and Google")]
+        fetch.return_value.open.side_effect = [
+            page("https://www.a.example/legal", b"<html><script>var subject = 1;</script><h1>Terms</h1>"
+                 b"<p>Operated by <b>Subject</b>\n Ltd.</p><p>Registered office.</p><p>" + b"x" * 300 + b"</p></html>"),
+            HTTPError("https://b.example/legal", 404, "Not Found", {}, io.BytesIO(b"<p>No such name here.</p>")),
+            page("https://other.example/legal", b"<p>Subject Ltd runs this site.</p>"),
+            OSError("unavailable")]
+        output = io.StringIO()
+        with patch("sys.argv", ["script", "candidate", "--path", "/legal", "--expect", "subject",
+                                "--domain", "a.example", "--domain", "b.example", "--domain", "c.example",
+                                "--domain", "d.example", "--domain", "e.example"]), redirect_stdout(output):
+            self.assertEqual(app.main(), 1)
+        lines = output.getvalue().splitlines()
+        self.assertEqual(lines[0], "a.example: hit https://a.example/legal final https://www.a.example/legal "
+                                   "status 200 subject named")
+        self.assertEqual(lines[1:4], ["  Terms", "  Operated by Subject Ltd.", "  Registered office."])
+        self.assertEqual(lines[4], "b.example: miss https://b.example/legal final https://b.example/legal "
+                                   "status 404 subject not named")
+        self.assertTrue(lines[5].startswith("c.example: redirected https://c.example/legal final "
+                                            "https://other.example/legal"))
+        self.assertEqual(lines[6], "  Subject Ltd runs this site.")
+        self.assertTrue(lines[7].startswith("d.example: unavailable https://d.example/legal"))
+        self.assertTrue(lines[8].startswith("e.example: unresolved"))
+        self.assertEqual(lines[9], "Candidate checks are filter results, not ownership decisions.")
+        self.assertEqual(len(lines), 10)
+        first = fetch.return_value.open.call_args_list[0]
+        self.assertEqual((first.args[0].full_url, first.kwargs), ("https://a.example/legal", {"timeout": 15}))
+        self.assertEqual(dns.call_count, 5)
+
+    @patch.object(app, "build_opener")
+    @patch.object(app, "dns_addresses", return_value=["192.0.2.1"])
+    def test_cli_candidate_exits_zero_only_for_hits_on_own_hostname(self, dns, fetch):
+        response = MagicMock(status=200, **{"geturl.return_value": "https://a.example/legal",
+                                            "read.return_value": b"<p>" + b"Subject " * 60 + b"</p>"})
+        fetch.return_value.open.return_value.__enter__.return_value = response
+        output = io.StringIO()
+        with patch("sys.argv", ["script", "candidate", "--path", "/legal", "--expect", "Subject",
+                                "--domain", "a.example", "--domain", "a.example"]), redirect_stdout(output):
+            self.assertEqual(app.main(), 0)
+        lines = output.getvalue().splitlines()
+        self.assertEqual(len(lines), 3)
+        self.assertEqual(len(lines[1]), 2 + 200)
+        self.assertEqual(fetch.return_value.open.call_count, 1)
 
     @patch.object(app, "review", return_value=[])
     def test_cli_review_only_checks_selected_records(self, review):
