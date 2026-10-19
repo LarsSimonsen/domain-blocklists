@@ -176,11 +176,26 @@ class SelectionTests(unittest.TestCase):
 
     def test_cli_rejects_invalid_selection_and_partial_build(self):
         for args in [("inspect", "--limit", "0"), ("review", "--offset", "-1"),
-                     ("build", "--list", "test"), ("check", "--domain", "a.example")]:
+                     ("build", "--list", "test"), ("check", "--domain", "a.example"),
+                     ("resolve",), ("resolve", "--domain", "a.example", "--limit", "1")]:
             with self.subTest(args=args), patch("sys.argv", ["script", *args]), redirect_stderr(io.StringIO()):
                 with self.assertRaises(SystemExit) as error:
                     app.main()
                 self.assertEqual(error.exception.code, 2)
+
+    @patch.object(app, "dns_addresses")
+    def test_cli_resolve_reports_receipts_without_touching_data(self, dns):
+        dns.side_effect = [["192.0.2.1"], OSError("no addresses returned by Cloudflare and Google"),
+                           OSError("public DNS checks inconclusive")]
+        output = io.StringIO()
+        with patch("sys.argv", ["script", "resolve", "--domain", "a.example", "--domain", "b.example",
+                                "--domain", "c.example", "--domain", "a.example"]), redirect_stdout(output):
+            self.assertEqual(app.main(), 1)
+        lines = output.getvalue().splitlines()
+        self.assertEqual(lines[0], "a.example: resolved 192.0.2.1")
+        self.assertTrue(lines[1].startswith("b.example: unresolved"))
+        self.assertTrue(lines[2].startswith("c.example: inconclusive"))
+        self.assertEqual(dns.call_count, 3)
 
     @patch.object(app, "review", return_value=[])
     def test_cli_review_only_checks_selected_records(self, review):

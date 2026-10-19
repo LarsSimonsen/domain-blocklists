@@ -8,13 +8,13 @@ Each list has a defined purpose, documented inclusion criteria, and supporting e
 
 | List | Scope | Status |
 | --- | --- | --- |
-| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified expanded set: 579 entries |
+| [Headout](data/headout.yaml) | Domains with documented evidence of Headout ownership or operation, including dedicated hostnames on shared services | Verified expanded set: 580 entries |
 
 Additional lists may be added over time, each with its own scope and inclusion criteria.
 
 ## Use
 
-The exports contain 578 verified entries and block the listed names and their descendants. Subscribe using the appropriate URL:
+The exports contain 580 verified entries and block the listed names and their descendants. Subscribe using the appropriate URL:
 
 | Product or format | Subscription / download |
 | --- | --- |
@@ -76,7 +76,7 @@ One GitHub Actions workflow also runs monthly and on manual request. `python scr
 
 ### Small-context updates
 
-The repository's [domain-update skill](.agents/skills/domain-update/SKILL.md) guides additions, corrections, and reverification in small work units. KISS and YAGNI apply: reuse the existing script and schema; add machinery only for a demonstrated need.
+The repository's [domain-update skill](.agents/skills/domain-update/SKILL.md) guides additions, corrections, and reverification in small work units, and the [domain-discovery skill](.agents/skills/domain-discovery/SKILL.md) covers finding new candidates. KISS and YAGNI apply: reuse the existing script and schema; add machinery only for a demonstrated need.
 
 Read a small JSON packet instead of sending the entire dataset to a model:
 
@@ -84,11 +84,12 @@ Read a small JSON packet instead of sending the entire dataset to a model:
 python scripts/blocklists.py inspect --list headout --offset 0 --limit 5
 python scripts/blocklists.py inspect --list headout --domain tickets.example.com
 python scripts/blocklists.py review --list headout --offset 0 --limit 5
+python scripts/blocklists.py resolve --domain candidate.example.com
 ```
 
-`inspect` is offline and defaults to five records. A domain query reports existing coverage and listed descendants, including the dedicated-hostname boundary. It does not verify a candidate or authorize broadening a block. Domain arguments must be lowercase hostnames and may be repeated. Follow `next_offset` until it is null. Save the dataset fingerprint with any pagination checkpoint; if the data changes, reconcile completed hostnames and restart pagination to avoid skipping records. `review --domain` selects exact existing records only. An unfiltered `review` still checks all records; `build` and `check` always cover every list.
+`inspect` is offline and defaults to five records. A domain query reports existing coverage and listed descendants, including the dedicated-hostname boundary. It does not verify a candidate or authorize broadening a block. Domain arguments must be lowercase hostnames and may be repeated. Follow `next_offset` until it is null. Save the dataset fingerprint with any pagination checkpoint; if the data changes, reconcile completed hostnames and restart pagination to avoid skipping records. `review --domain` selects exact existing records only. `resolve` preflights any hostname through Cloudflare and Google DNS-over-HTTPS and prints a receipt per name; it does not verify ownership. An unfiltered `review` still checks all records; `build` and `check` always cover every list.
 
-Keep candidate evidence and progress outside the repository. Checkpoint after each batch and continue the requested scope; five records is a context limit, not a completeness claim. Updating named records does not require starting a new exhaustive search. Requests to discover more Headout domains retain the exhaustive discovery workflow unless the user asks for a bounded pass.
+Keep candidate evidence and progress outside the repository. Checkpoint after each batch and continue the requested scope; five records is a context limit, not a completeness claim. Updating named records does not require starting a new exhaustive search. Requests to discover more Headout domains follow the domain-discovery skill's exhaustive mode unless the user asks for a bounded pass.
 
 The monthly review waits for validation and streams findings as each record finishes. Its text report is also saved as a workflow artifact, including partial findings when the upload step can run after a failure. Availability signals remain prompts for review, not automatic evidence decisions.
 
