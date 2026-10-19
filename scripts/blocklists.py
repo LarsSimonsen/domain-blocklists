@@ -1,4 +1,4 @@
-"""Inspect verified records, validate YAML, generate exports, preflight DNS, filter candidates, or flag review needs."""
+"""Inspect verified records, validate YAML, add records, generate exports, preflight DNS, filter candidates, or flag review needs."""
 
 import argparse
 from datetime import date
@@ -52,19 +52,22 @@ def valid_domain(value):
 
 
 def load_records(path):
-    records = yaml.load(path.read_text(encoding="utf-8"), Loader=UniqueLoader)
+    return validate_records(yaml.load(path.read_text(encoding="utf-8"), Loader=UniqueLoader), str(path))
+
+
+def validate_records(records, label):
     if not isinstance(records, list):
-        raise ValueError(f"{path}: expected a YAML list (use [] when empty)")
+        raise ValueError(f"{label}: expected a YAML list (use [] when empty)")
     seen = set()
     required = {"domain", "relationship", "verified_on", "sources"}
     for entry in records:
         if not isinstance(entry, dict) or not required <= entry.keys():
-            raise ValueError(f"{path}: missing required record fields")
+            raise ValueError(f"{label}: missing required record fields")
         if entry.keys() - required - {"notes"}:
-            raise ValueError(f"{path}: unknown record fields")
+            raise ValueError(f"{label}: unknown record fields")
         domain = entry["domain"]
         if not valid_domain(domain) or domain in seen:
-            raise ValueError(f"{path}: invalid or duplicate domain {domain!r}")
+            raise ValueError(f"{label}: invalid or duplicate domain {domain!r}")
         seen.add(domain)
         if entry["relationship"] not in ("owned", "operated", "dedicated-hostname"):
             raise ValueError(f"{domain}: invalid relationship")
@@ -221,6 +224,49 @@ def review(records, emit=None):
     return findings
 
 
+class RecordDumper(yaml.SafeDumper):
+    """Indent nested sequences the way the datasets are written."""
+
+    def increase_indent(self, flow=False, indentless=False):
+        return super().increase_indent(flow, False)
+
+
+def add_records(path, packets, replace=False):
+    """Insert verified records without rewriting or reordering the other records."""
+    if isinstance(packets, dict):
+        packets = [packets]
+    if not isinstance(packets, list) or not packets:
+        raise ValueError("add expects one record or a nonempty list of records on stdin")
+    head, *blocks = re.split(r"(?m)^(?=- domain: )", path.read_text(encoding="utf-8"))
+    blocks = [block if block.endswith("\n") else block + "\n" for block in blocks]
+    names = [block.split("\n", 1)[0][len("- domain: "):].strip() for block in blocks]
+    for packet in packets:
+        if not isinstance(packet, dict) or not isinstance(packet.get("domain"), str):
+            raise ValueError("each record must be an object with a domain")
+        record = {"domain": packet["domain"], "relationship": packet.get("relationship"),
+                  "verified_on": str(packet.get("verified_on") or date.today().isoformat()),
+                  "sources": packet.get("sources")}
+        if "notes" in packet:
+            record["notes"] = packet["notes"]
+        if packet.keys() - record.keys():
+            raise ValueError(f"{record['domain']}: unknown record fields")
+        rendered = yaml.dump([record], Dumper=RecordDumper, sort_keys=False,
+                             allow_unicode=True, width=float("inf"))
+        if record["domain"] in names:
+            if not replace:
+                raise ValueError(f"{record['domain']}: record exists; use --replace to reverify it")
+            blocks[names.index(record["domain"])] = rendered
+        else:
+            # Keep the file's order; place the record before the first name that sorts after it.
+            index = next((i for i, name in enumerate(names) if name > record["domain"]), len(names))
+            blocks.insert(index, rendered)
+            names.insert(index, record["domain"])
+    text = head + "".join(blocks)
+    validate_records(yaml.load(text, Loader=UniqueLoader), str(path))
+    path.write_text(text, encoding="utf-8", newline="\n")
+    return len(packets)
+
+
 def select_records(datasets, domains, offset, limit, include_related=False):
     """Select a stable, small work unit without loading all records into a prompt."""
     rows = [{"list": name, **entry} for name, records in datasets.items() for entry in records]
@@ -321,13 +367,14 @@ def candidate(domains, path, expect, emit=print):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("build", "check", "review", "inspect", "resolve", "candidate"))
+    parser.add_argument("command", choices=("build", "check", "review", "inspect", "resolve", "candidate", "add"))
     parser.add_argument("--list", dest="list_name", help="Select one dataset (inspect/review only)")
     parser.add_argument("--domain", action="append", default=[], help="Select a hostname; repeatable")
     parser.add_argument("--offset", type=int, default=0, help="Skip records in sorted order")
     parser.add_argument("--limit", type=int, help="Maximum records; inspect defaults to 5")
     parser.add_argument("--path", help="Evidence path to fetch on each hostname (candidate only)")
     parser.add_argument("--expect", help="Subject string to look for, case-insensitive (candidate only)")
+    parser.add_argument("--replace", action="store_true", help="Let add overwrite an existing record (add only)")
     args = parser.parse_args()
     if args.offset < 0 or (args.limit is not None and args.limit < 1):
         parser.error("offset must be nonnegative and limit must be positive")
@@ -345,6 +392,11 @@ def main():
                      "and no selection options")
     if args.command != "candidate" and (args.path or args.expect):
         parser.error("--path and --expect apply to candidate only")
+    if args.command == "add" and (
+            not args.list_name or args.domain or args.offset or args.limit is not None):
+        parser.error("add takes --list, optional --replace, and records as JSON on stdin")
+    if args.replace and args.command != "add":
+        parser.error("--replace applies to add only")
     try:
         if any(not valid_domain(domain) for domain in args.domain):
             raise ValueError("--domain requires a lowercase hostname, without a URL or wildcard")
@@ -366,6 +418,11 @@ def main():
             if args.list_name not in datasets:
                 raise ValueError(f"Unknown list: {args.list_name}")
             datasets = {args.list_name: datasets[args.list_name]}
+        if args.command == "add":
+            path = ROOT / "data" / f"{args.list_name}.yaml"
+            count = add_records(path, json.load(sys.stdin), args.replace)
+            print(f"add: {count} record(s) written to {path.relative_to(ROOT).as_posix()}; run build, check, and tests")
+            return 0
         if args.command in ("inspect", "review"):
             limit = 5 if args.command == "inspect" and args.limit is None else args.limit
             packet = select_records(datasets, args.domain, args.offset, limit,
