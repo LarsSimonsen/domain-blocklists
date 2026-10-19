@@ -86,11 +86,27 @@ python scripts/blocklists.py inspect --list headout --domain tickets.example.com
 python scripts/blocklists.py review --list headout --offset 0 --limit 5
 python scripts/blocklists.py resolve --domain candidate.example.com
 python scripts/blocklists.py candidate --domain candidate.example.com --path /company-details --expect "Headout"
+python scripts/blocklists.py add --list headout < packet.json
 ```
 
-`inspect` is offline and defaults to five records. A domain query reports existing coverage and listed descendants, including the dedicated-hostname boundary. It does not verify a candidate or authorize broadening a block. Domain arguments must be lowercase hostnames and may be repeated. Follow `next_offset` until it is null. Save the dataset fingerprint with any pagination checkpoint; if the data changes, reconcile completed hostnames and restart pagination to avoid skipping records. `review --domain` selects exact existing records only. `resolve` preflights any hostname through Cloudflare and Google DNS-over-HTTPS and prints a receipt per name; it does not verify ownership. `candidate` runs the discovery filter in bulk: it resolves each hostname the same way, fetches the given evidence path over HTTPS through the approved resolvers, and prints the final URL, the HTTP status, whether the expected subject string appears, and a few lines of context around the first match. A hit is a filter result, not an ownership decision; the criteria still require reading the statement in context. An unfiltered `review` still checks all records; `build` and `check` always cover every list.
+`inspect` is offline and defaults to five records. A domain query reports existing coverage and listed descendants, including the dedicated-hostname boundary. It does not verify a candidate or authorize broadening a block. Domain arguments must be lowercase hostnames and may be repeated. Follow `next_offset` until it is null. Save the dataset fingerprint with any pagination checkpoint; if the data changes, reconcile completed hostnames and restart pagination to avoid skipping records. `review --domain` selects exact existing records only. `resolve` preflights any hostname through Cloudflare and Google DNS-over-HTTPS and prints a receipt per name; it does not verify ownership. `candidate` runs the discovery filter in bulk: it resolves each hostname the same way, fetches the given evidence path over HTTPS through the approved resolvers, and prints the final URL, the HTTP status, whether the expected subject string appears, and a few lines of context around the first match. A hit is a filter result, not an ownership decision; the criteria still require reading the statement in context. `add` reads one record or a JSON list of records on stdin, fills `verified_on` with today when absent, inserts each before the first existing record that sorts after it without touching other records, and refuses anything the validator would reject; `--replace` updates an existing record for reverification. An unfiltered `review` still checks all records; `build` and `check` always cover every list.
 
 Keep candidate evidence and progress outside the repository. Checkpoint after each batch and continue the requested scope; five records is a context limit, not a completeness claim. Updating named records does not require starting a new exhaustive search. Requests to discover more Headout domains follow the domain-discovery skill's exhaustive mode unless the user asks for a bounded pass.
+
+#### Model tiers
+
+The script carries the structural work, so a model's only judgment is whether a legal statement covers an exact hostname. That lets cheap models drive the workflow as long as a stronger model verifies each packet before it is applied. These are judgment-based recommendations, not benchmark results; a fixed set of about forty ledger cases (verified records, rejected affiliates, redirect-only pages, shared-host candidates) run against each candidate model replaces them with measurements.
+
+| Task | Smallest tier to rely on | Why |
+| --- | --- | --- |
+| Driver: running `inspect`, `candidate`, `add`, `build`, `check`, tests, and keeping the ledger | Haiku-class hosted model, or a local model around 27B with reliable tool calling | Procedure following with the checks as a backstop |
+| Name generation for discovery lanes | Any model, or a plain script | Mechanical |
+| First reading of a hit and the four-way decision | Haiku-class or 27B | A short snippet against an explicit table |
+| Verifier for every packet before `add` | Opus-class | Catches redirect, supplier, and shared-host mistakes that the checks cannot |
+| Unattended writes to the repository from pages a model fetched | Opus-class or Fable-class | Resistance to instructions embedded in fetched pages |
+| Exhaustive discovery as driver, including the saturation decision | Opus-class, Fable-class to run unattended | Long-horizon bookkeeping and honest stopping |
+
+Models around 9B are not recommended for any role that writes to the repository. Their failures are structurally valid and pass the checks: lost batch discipline, silently changed dates, redirect targets treated as evidence for the original hostname, and saturation claimed after a few dry searches.
 
 The monthly review waits for validation and streams findings as each record finishes. Its text report is also saved as a workflow artifact, including partial findings when the upload step can run after a failure. Availability signals remain prompts for review, not automatic evidence decisions.
 

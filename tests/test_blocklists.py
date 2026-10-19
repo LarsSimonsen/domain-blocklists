@@ -179,6 +179,7 @@ class SelectionTests(unittest.TestCase):
         for args in [("inspect", "--limit", "0"), ("review", "--offset", "-1"),
                      ("build", "--list", "test"), ("check", "--domain", "a.example"),
                      ("resolve",), ("resolve", "--domain", "a.example", "--limit", "1"),
+                     ("add",), ("add", "--list", "test", "--domain", "a.example"), ("inspect", "--replace"),
                      ("candidate", "--domain", "a.example", "--expect", "Subject"),
                      ("candidate", "--domain", "a.example", "--path", "legal", "--expect", "Subject"),
                      ("resolve", "--domain", "a.example", "--path", "/legal")]:
@@ -252,6 +253,51 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(len(lines), 3)
         self.assertEqual(len(lines[1]), 2 + 200)
         self.assertEqual(fetch.return_value.open.call_count, 1)
+
+    def test_add_inserts_sorted_and_leaves_other_records_untouched(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "test.yaml"
+            path.write_text("# header\n" + yaml.safe_dump([record("b.example"), record("d.example")]), newline="\n")
+            before = path.read_text()
+            packet = {"domain": "c.example", "relationship": "owned",
+                      "sources": [{"url": "https://c.example/legal", "evidence": "States ownership."}]}
+            self.assertEqual(app.add_records(path, packet), 1)
+            after = path.read_text()
+            self.assertTrue(after.startswith("# header\n"))
+            for block in before.split("- domain: ")[1:]:
+                self.assertIn("- domain: " + block, after)
+            records = app.load_records(path)
+            self.assertEqual([r["domain"] for r in records], ["b.example", "c.example", "d.example"])
+            self.assertEqual(str(records[1]["verified_on"]), date.today().isoformat())
+            self.assertIn("verified_on: '" + date.today().isoformat() + "'", after)
+            self.assertIn("    - url: https://c.example/legal", after)
+            for bad in [packet, {**packet, "domain": "e.example", "extra": 1},
+                        {**packet, "domain": "e.example", "relationship": "partner"},
+                        {**packet, "domain": "e.example", "verified_on": "2999-01-01"}, [], "text"]:
+                with self.subTest(bad=bad), self.assertRaises(ValueError):
+                    app.add_records(path, bad)
+                self.assertEqual(path.read_text(), after)
+            replaced = {**packet, "verified_on": "2026-01-02", "notes": "Boundary note."}
+            self.assertEqual(app.add_records(path, [replaced], replace=True), 1)
+            self.assertEqual(app.load_records(path)[1]["notes"], "Boundary note.")
+            self.assertEqual(len(app.load_records(path)), 3)
+
+    def test_cli_add_reads_packets_from_stdin(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "data").mkdir()
+            (root / "data" / "test.yaml").write_text(yaml.safe_dump([record("a.example")]))
+            packet = json.dumps({"domain": "b.example", "relationship": "operated",
+                                 "sources": [{"url": "https://b.example/legal", "evidence": "Names the entity."}]})
+            with patch.object(app, "ROOT", root), patch("sys.argv", ["script", "add", "--list", "test"]), \
+                    patch("sys.stdin", io.StringIO(packet)), redirect_stdout(io.StringIO()):
+                self.assertEqual(app.main(), 0)
+            self.assertEqual([r["domain"] for r in app.load_records(root / "data" / "test.yaml")],
+                             ["a.example", "b.example"])
+            with patch.object(app, "ROOT", root), patch("sys.argv", ["script", "add", "--list", "test"]), \
+                    patch("sys.stdin", io.StringIO(packet)), redirect_stderr(io.StringIO()):
+                self.assertEqual(app.main(), 1)
+            self.assertFalse((root / "lists").exists())
 
     @patch.object(app, "review", return_value=[])
     def test_cli_review_only_checks_selected_records(self, review):
