@@ -1,5 +1,5 @@
 ! Generated from verified records; do not edit.
-! Entries: 678; includes descendants of each listed name.
+! Entries: 680; includes descendants of each listed name.
 ||abudhabi-city-tours.com^
 ||abudhabi-tickets.com^
 ||abudhabitickets.com^
@@ -516,6 +516,7 @@
 ||thecitypasses.com^
 ||themeparkstickets.com^
 ||thenewyorktickets.com^
+||theshardtickets.co.uk^
 ||thessalonikitickets.com^
 ||thetoppenangtickets.com^
 ||thevaticantickets.com^
@@ -638,6 +639,7 @@
 ||turkish-baths.com^
 ||uk-rail-pass.com^
 ||umbriatickets.com^
+||upo2tickets.co.uk^
 ||utrecht-tickets.com^
 ||valleyofthekings-tours.com^
 ||vancouver-tours.com^

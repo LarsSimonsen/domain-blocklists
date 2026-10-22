@@ -1867,6 +1867,12 @@
   sources:
     - url: https://www.thenewyorktickets.com/company-details/
       evidence: The domain's live legal/terms page includes direct Headout operator language and exposes Headout legal identifiers.
+- domain: theshardtickets.co.uk
+  relationship: owned
+  verified_on: '2026-10-22'
+  sources:
+    - url: https://www.theshardtickets.co.uk/
+      evidence: 'The live site states ''Crafted by Headout, a global experiences brand offering curated tours, tickets & experiences'' and ''Headout is an authorized and trusted partner of this venue'', with a ''© 2014-2026 Headout Inc, 82 Nassau St #60351 New York, NY 10038'' footer; the site is not the venue''s own website.'
 - domain: thessalonikitickets.com
   relationship: operated
   verified_on: '2026-09-04'
@@ -2449,6 +2455,12 @@
   sources:
     - url: https://www.umbriatickets.com/company-details/
       evidence: The live Company details page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: upo2tickets.co.uk
+  relationship: owned
+  verified_on: '2026-10-22'
+  sources:
+    - url: https://www.upo2tickets.co.uk/
+      evidence: 'The live site states ''Crafted by Headout, a global experiences brand offering curated tours, tickets & experiences'' and ''Headout is an authorized and trusted partner of this venue'', with a ''© 2014-2026 Headout Inc, 82 Nassau St #60351 New York, NY 10038'' footer; the site is not the venue''s own website.'
 - domain: valleyofthekings-tours.com
   relationship: operated
   verified_on: '2026-09-04'
