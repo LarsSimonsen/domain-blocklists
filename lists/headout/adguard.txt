@@ -1,5 +1,5 @@
 ! Generated from verified records; do not edit.
-! Entries: 680; includes descendants of each listed name.
+! Entries: 682; includes descendants of each listed name.
 ||abudhabi-city-tours.com^
 ||abudhabi-tickets.com^
 ||abudhabitickets.com^
@@ -37,6 +37,7 @@
 ||barcelona-aerobus-tickets.com^
 ||barcelona-flamenco-shows.com^
 ||barcelona-tickets.com^
+||barcelonacathedral-tickets.com^
 ||bari-tours.com^
 ||basilica-di-san-marco.com^
 ||basilicacisterntickets.com^
@@ -358,6 +359,7 @@
 ||nationalaquariumtickets.com^
 ||neverseatickets.com^
 ||new-orleans-tickets.com^
+||new-york-helicopter.com^
 ||newyorktickets.com^
 ||newzealand-tickets.com^
 ||nha-trang-tickets.com^

@@ -125,6 +125,12 @@
   sources:
     - url: https://www.barcelona-tickets.com/company-details/
       evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: barcelonacathedral-tickets.com
+  relationship: owned
+  verified_on: '2026-10-26'
+  sources:
+    - url: https://www.barcelonacathedral-tickets.com/
+      evidence: The live site states it is "Crafted by Headout" and "run by Headout"; the privacy policy defines Company as Headout. Inc., and the footer carries the Headout Inc. legal address.
 - domain: basilica-di-san-marco.com
   relationship: operated
   verified_on: '2026-10-19'
@@ -1195,6 +1201,12 @@
   sources:
     - url: https://www.new-orleans-tickets.com/company-details/
       evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: new-york-helicopter.com
+  relationship: owned
+  verified_on: '2026-10-26'
+  sources:
+    - url: https://www.new-york-helicopter.com/
+      evidence: The live site states it is "Crafted by Headout" and "run by Headout"; the privacy policy defines Company as Headout. Inc., and the footer carries the Headout Inc. legal address.
 - domain: newyorktickets.com
   relationship: operated
   verified_on: '2026-09-04'
