@@ -131,7 +131,7 @@ class BlocklistsTests(unittest.TestCase):
         response = MagicMock()
         response.geturl.return_value = "https://example.com/replacement"
         fetch.return_value.open.return_value.__enter__.return_value = response
-        self.assertIn("redirected", app.review([record()])[0])
+        self.assertIn("redirected to https://example.com/replacement", app.review([record()])[0])
         response.geturl.return_value = "https://example.com/legal"
         self.assertEqual(app.review([record()]), [])
 

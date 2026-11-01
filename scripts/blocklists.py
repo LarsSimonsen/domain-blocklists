@@ -216,9 +216,10 @@ def review(records, emit=None):
                 try:
                     request = Request(url, headers={"User-Agent": "domain-blocklists-review/1.0"})
                     with opener.open(request, timeout=15) as response:
+                        final = response.geturl()
                         checked_sources[url] = (
-                            "source redirected; confirm evidence manually"
-                            if response.geturl() != url else None)
+                            f"source redirected to {final}; confirm evidence manually"
+                            if final != url else None)
                 except (OSError, ValueError, http.client.HTTPException):
                     checked_sources[url] = "source unavailable; check manually"
             if checked_sources[url]:
