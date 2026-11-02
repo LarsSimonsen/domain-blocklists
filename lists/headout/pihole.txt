@@ -1,5 +1,5 @@
 ! Generated from verified records; do not edit.
-! Entries: 682; includes descendants of each listed name.
+! Entries: 683; includes descendants of each listed name.
 ||abudhabi-city-tours.com^
 ||abudhabi-tickets.com^
 ||abudhabitickets.com^
@@ -577,6 +577,7 @@
 ||toronto-tours.com^
 ||toulouse-tickets.com^
 ||tour-cyprus.com^
+||tourlandish.com^
 ||tours-alicante.com^
 ||tours-antalya.com^
 ||tours-athens.com^
