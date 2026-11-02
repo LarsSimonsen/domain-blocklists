@@ -4040,6 +4040,12 @@
   sources:
     - url: https://www.tour-cyprus.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: tourlandish.com
+  relationship: operated
+  verified_on: '2026-11-02'
+  sources:
+    - url: https://tourlandish.com/legal/
+      evidence: The domain (and www host) 301-redirects to https://www.headout.com/legal/; Headout's privacy policy lists 'Tourlandish Online Ventures Private Limited' among its operating subsidiaries, matching the domain's registered brand name.
 - domain: tours-banff.com
   relationship: operated
   verified_on: '2026-11-01'
