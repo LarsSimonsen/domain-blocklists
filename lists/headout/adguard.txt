@@ -1,5 +1,5 @@
 ! Generated from verified records; do not edit.
-! Entries: 683; includes descendants of each listed name.
+! Entries: 688; includes descendants of each listed name.
 ||abudhabi-city-tours.com^
 ||abudhabi-tickets.com^
 ||abudhabitickets.com^
@@ -51,6 +51,7 @@
 ||berlin-tickets.com^
 ||big-five-safari.com^
 ||billets-chateaux-de-la-loire.fr^
+||billets-cote-dazur.fr^
 ||billetseiffel.fr^
 ||birminghamtickets.com^
 ||blackpool-tickets.com^
@@ -186,6 +187,7 @@
 ||edinburgh-tickets.com^
 ||egypt-tickets.com^
 ||eiffeltickets.com^
+||elbphilharmonietours.com^
 ||elcalafate-tours.com^
 ||enkhuizen-tickets.com^
 ||entradas-almeria.com^
@@ -287,6 +289,7 @@
 ||kravica-waterfall-tickets.com^
 ||krkanationalparktickets.com^
 ||kuala-lumpur-tickets.com^
+||kuranda-tours.com^
 ||kyototickets.com^
 ||lake-como-tours.com^
 ||lake-garda-tours.com^
@@ -334,6 +337,7 @@
 ||melaka-tickets.com^
 ||melaka-tours.com^
 ||memorial-911-museum-tickets.com^
+||mendoza-tours.com^
 ||meteora-tours.com^
 ||metz-tickets.com^
 ||mexico-city-tours.com^
@@ -377,6 +381,7 @@
 ||okinawatickets.com^
 ||oklahoma-city-tickets.com^
 ||online-tickets.co^
+||opera-shows.com^
 ||orlando-ticket.com^
 ||osaka-tickets.com^
 ||oslo-tickets.com^

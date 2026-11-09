@@ -191,6 +191,12 @@
   sources:
     - url: https://www.big-five-safari.com/company-details/
       evidence: The live Company details page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: billets-cote-dazur.fr
+  relationship: operated
+  verified_on: '2026-11-09'
+  sources:
+    - url: https://www.billets-cote-dazur.fr/company-details/
+      evidence: The live Company details page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
 - domain: blue-mountain-day-tours.com
   relationship: operated
   verified_on: '2026-09-04'
@@ -563,6 +569,12 @@
   sources:
     - url: https://www.eiffeltickets.com/company-details/
       evidence: The domain's live Company details page lists Headout Inc. as the legal entity and provides its New York correspondence address, registration number 5541011, and legal@headout.com contact.
+- domain: elbphilharmonietours.com
+  relationship: operated
+  verified_on: '2026-11-09'
+  sources:
+    - url: https://elbphilharmonietours.com/company-details/
+      evidence: The live Company Details page on this website gives Headout Inc. as the company name and states that the website is run by Headout.
 - domain: elcalafate-tours.com
   relationship: operated
   verified_on: '2026-11-01'
@@ -931,6 +943,12 @@
   sources:
     - url: https://www.kuala-lumpur-tickets.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: kuranda-tours.com
+  relationship: operated
+  verified_on: '2026-11-09'
+  sources:
+    - url: https://www.kuranda-tours.com/legal/
+      evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
 - domain: kyototickets.com
   relationship: operated
   verified_on: '2026-11-01'
@@ -1086,6 +1104,12 @@
   verified_on: '2026-11-01'
   sources:
     - url: https://www.medellin-tickets.com/legal/
+      evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: mendoza-tours.com
+  relationship: operated
+  verified_on: '2026-11-09'
+  sources:
+    - url: https://www.mendoza-tours.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
 - domain: meteora-tours.com
   relationship: operated
@@ -1273,6 +1297,12 @@
   sources:
     - url: https://www.online-tickets.co/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: opera-shows.com
+  relationship: operated
+  verified_on: '2026-11-09'
+  sources:
+    - url: https://www.opera-shows.com/company-details/
+      evidence: The live Company details page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
 - domain: osaka-tickets.com
   relationship: operated
   verified_on: '2026-11-01'
