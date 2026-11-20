@@ -1,11 +1,12 @@
 ! Generated from verified records; do not edit.
-! Entries: 688; includes descendants of each listed name.
+! Entries: 702; includes descendants of each listed name.
 ||abudhabi-city-tours.com^
 ||abudhabi-tickets.com^
 ||abudhabitickets.com^
 ||acropolis-tickets.com^
 ||adelaide-tickets.com^
 ||agadir-tickets.com^
+||agafay-desert.tours^
 ||airporttransfertickets.com^
 ||alaska-tickets.com^
 ||alcazar-seville-tickets.com^
@@ -60,6 +61,8 @@
 ||bluemosquetickets.com^
 ||boletos-mexico.com^
 ||bologna-tickets.com^
+||book.dubai-city-tours.com^
+||book.duomo-milan-tickets.com^
 ||book.golden-circle-tour.com^
 ||book.grand-canyon-tours.com^
 ||book.groningen-tickets.com^
@@ -81,14 +84,18 @@
 ||book.lombok-tickets.com^
 ||book.macau-tickets.com^
 ||book.mandurah-tickets.com^
+||book.marineland-antibes-tickets.com^
 ||book.mauritius-tickets.com^
 ||book.melaka-tickets.com^
 ||book.melaka-tours.com^
 ||book.muscat-tours.com^
 ||book.nairobi-tours.com^
+||book.new-york-tickets.com^
 ||book.oklahoma-city-tickets.com^
 ||book.paestumtickets.com^
+||book.palazzo-vecchio-tickets.com^
 ||book.postojnacavetickets.com^
+||book.seville-cathedral-tickets.com^
 ||book.shanghai-tickets.com^
 ||book.shenzhen-tickets.com^
 ||book.shkoder-tours.com^
@@ -98,6 +105,7 @@
 ||book.stewart-island-tours.com^
 ||book.strasbourg-tours.com^
 ||book.sunshine-coast-tickets.com^
+||book.sydney-day-trips.com^
 ||book.tango-show-tickets.com^
 ||bordeauxtickets.fr^
 ||borghesegallerytickets.com^
@@ -338,6 +346,7 @@
 ||melaka-tours.com^
 ||memorial-911-museum-tickets.com^
 ||mendoza-tours.com^
+||merzouga-desert.tours^
 ||meteora-tours.com^
 ||metz-tickets.com^
 ||mexico-city-tours.com^
@@ -434,6 +443,7 @@
 ||quake-tickets.com^
 ||queenstown-tickets.com^
 ||quintadaregaleiratickets.com^
+||rainbow-mountain-tours.com^
 ||ravenna-tickets.com^
 ||reggia-di-caserta.com^
 ||reichstag-tours.com^
@@ -482,6 +492,7 @@
 ||shanghai-tickets.com^
 ||sharjah-tours.com^
 ||sharjahdesertparktickets.com^
+||sharm-el-sheikh-tours.com^
 ||shenzhen-tickets.com^
 ||shkoder-tours.com^
 ||sicilytickets.com^
@@ -679,6 +690,9 @@
 ||wineglassbay-tours.com^
 ||wonderworks-tickets.com^
 ||wroclaw-tickets.com^
+||www.dubai-city-tours.com^
+||www.sagradafamiliatickets.com^
+||www.sydney-day-trips.com^
 ||yilan-tickets.com^
 ||yogyakarta-tickets.com^
 ||zakopane-tickets.com^
