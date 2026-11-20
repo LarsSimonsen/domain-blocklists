@@ -23,6 +23,12 @@
   sources:
     - url: https://www.adelaide-tickets.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: agafay-desert.tours
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://www.agafay-desert.tours/legal/
+      evidence: The live Legal page on this website names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
 - domain: airporttransfertickets.com
   relationship: operated
   verified_on: '2026-10-19'
@@ -221,6 +227,50 @@
   sources:
     - url: https://www.bologna-tickets.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: book.dubai-city-tours.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://book.dubai-city-tours.com/legal/
+      evidence: The live Legal page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+- domain: book.duomo-milan-tickets.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://book.duomo-milan-tickets.com/legal/
+      evidence: The live Legal page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+- domain: book.marineland-antibes-tickets.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://book.marineland-antibes-tickets.com/legal/
+      evidence: The live Legal page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+- domain: book.new-york-tickets.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://book.new-york-tickets.com/legal/
+      evidence: The live Legal page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+  notes: 'Verified hostname only: the parent domain serves a different, already-listed website and redirects there, so the parent is not covered by this record.'
+- domain: book.palazzo-vecchio-tickets.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://book.palazzo-vecchio-tickets.com/legal/
+      evidence: The live Legal page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+- domain: book.seville-cathedral-tickets.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://book.seville-cathedral-tickets.com/legal/
+      evidence: The live Legal page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+- domain: book.sydney-day-trips.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://book.sydney-day-trips.com/legal/
+      evidence: The live Legal page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+  notes: Separate dedicated hostname under the same parent; it does not cover the parent or other hostnames on it.
 - domain: bordeauxtickets.fr
   relationship: operated
   verified_on: '2026-11-01'
@@ -1111,6 +1161,12 @@
   sources:
     - url: https://www.mendoza-tours.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: merzouga-desert.tours
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://www.merzouga-desert.tours/legal/
+      evidence: The live Legal page on this website names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
 - domain: meteora-tours.com
   relationship: operated
   verified_on: '2026-11-01'
@@ -1519,6 +1575,12 @@
   sources:
     - url: https://www.quintadaregaleiratickets.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: rainbow-mountain-tours.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://www.rainbow-mountain-tours.com/legal/
+      evidence: The live Legal page on this website names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
 - domain: reggia-di-caserta.com
   relationship: operated
   verified_on: '2026-11-01'
@@ -1753,6 +1815,12 @@
   sources:
     - url: https://www.sharjah-tours.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: sharm-el-sheikh-tours.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://www.sharm-el-sheikh-tours.com/legal/
+      evidence: The live Legal page on this website names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
 - domain: sienatickets.com
   relationship: operated
   verified_on: '2026-11-01'
@@ -2593,6 +2661,27 @@
   sources:
     - url: https://www.wineglassbay-tours.com/legal/
       evidence: The live Legal page on this website names Headout Inc. as the legal entity and gives its New York correspondence address.
+- domain: www.dubai-city-tours.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://www.dubai-city-tours.com/legal/
+      evidence: The live Legal page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+  notes: 'Dedicated hostname: the parent domain publishes no addresses at Cloudflare or Google, so it is not covered by this record and must not be substituted for it.'
+- domain: www.sagradafamiliatickets.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://www.sagradafamiliatickets.com/company-details/
+      evidence: The live Company details page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+  notes: 'Dedicated hostname: the parent domain publishes no addresses at Cloudflare or Google, so it is not covered by this record and must not be substituted for it.'
+- domain: www.sydney-day-trips.com
+  relationship: operated
+  verified_on: '2026-11-20'
+  sources:
+    - url: https://www.sydney-day-trips.com/company-details/
+      evidence: The live Company details page on this exact hostname names Headout Inc. as its legal entity and gives its New York correspondence address, registration number, and legal contact.
+  notes: 'Dedicated hostname: the parent domain publishes no addresses at Cloudflare or Google, so it is not covered by this record and must not be substituted for it.'
 - domain: yilan-tickets.com
   relationship: operated
   verified_on: '2026-09-04'
